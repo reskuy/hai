@@ -2,6 +2,7 @@
     <v-app-bar
       dark
       color="blue darken-4"
+      v-show="showappbar == true"
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
       <v-btn @click="ChangeURL('')" icon><v-icon>mdi-home</v-icon></v-btn>
@@ -29,18 +30,20 @@
           :to="acc.to"
           link
         >
-          <v-list-item-title @click="acc.to == 'auth' ? LogOut() : ChangeUrl(acc.to)" v-text="acc.text"/>
+          <v-list-item-title @click="ChangeURL(acc.to)" v-text="acc.text"/>
         </v-list-item>
       </v-list>
     </v-menu>
     </v-app-bar>
 </template>
 <script>
+import Vue from 'vue'
   export default {
     data: () => ({
     dialog:true,
     department:localStorage.getItem('departmentlogged'),
     UserPengguna:null,
+    showappbar:false,
     userlogged:localStorage.getItem('userlogged'),
     accitem: [
         {
@@ -59,21 +62,32 @@
         if(userlogged){
             this.dialog = false
             this.department=department
+            this.showappbar = true
         }
+        Vue.prototype.$setLogged = this.setLogged
     },
     methods:{
+      setLogged(){
+        this.userlogged = localStorage.getItem('userlogged')
+        this.department = localStorage.getItem('departmentlogged')
+      },
       LogOut(){
+        this.showappbar = false
+        this.$loggedout()
         localStorage.removeItem('userlogged')
         localStorage.removeItem('logged')
         localStorage.removeItem('departmentlogged')
-        localStorage.removeItem('Appbar')
-        this.$router.go('/auth')
+        this.$router.push('/auth')
       },
       ChangeURL(x){
         if(this.$route.path == '/'+x){
             return
         }
-        this.$router.push('/'+x)
+        if(x == 'auth'){
+          return this.LogOut()
+        }else{
+          return this.$router.push('/'+x)
+        }
       }, 
     }
   }

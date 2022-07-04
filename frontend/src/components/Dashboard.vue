@@ -16,10 +16,10 @@
     }),
     beforeMount(){
         this.device = this.$device
-        console.log(this.device)
+        // console.log(this.device)
     },
     mounted(){
-      console.log(this.$route.name)
+      // console.log(this.$route.name)
     }
     
   }

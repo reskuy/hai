@@ -210,6 +210,7 @@ import API from "@/services/http";
             localStorage.setItem('userlogged',this.UserPengguna)
             localStorage.setItem('departmentlogged',JSON.stringify(Department))
             this.userlogged = this.UserPengguna
+            this.$logged()
             this.dialog = false
         }
     }

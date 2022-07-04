@@ -47,7 +47,6 @@
         this.device = "Desktop"
       }
       Vue.prototype.$device = this.device
-      console.log(this.showappbar)
       //
     },
     methods:{

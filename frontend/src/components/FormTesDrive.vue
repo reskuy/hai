@@ -18,7 +18,7 @@
       <v-col cols="8">
         <v-text-field
         label="Department"
-        v-model="Department"
+        v-model="Department.nama_department"
         readonly/>
       </v-col>
 
@@ -167,7 +167,7 @@ import api from "@/services/http"
   export default {
     data: () => ({
       PenanggungJawab: localStorage.getItem("userlogged"),
-      Department: localStorage.getItem("departmentlogged"),
+      Department: JSON.parse(localStorage.getItem("departmentlogged")),
       NamaCustomer:null,
       AsetData:[],
       email: '',
