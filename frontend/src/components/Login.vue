@@ -63,7 +63,7 @@ export default {
       }
     },
     mounted(){
-        console.log('log')
+        // console.log('log')
     },
     methods:{
         login(){
@@ -81,8 +81,6 @@ export default {
              localStorage.setItem('logged',JSON.stringify(x.data))
              this.Toast('success','Welcome')
              this.loading = false
-             localStorage.setItem('Appbar',true)
-             this.$ShowAppbar = true
              this.$router.push('/')
            })
         },
