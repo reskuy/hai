@@ -12,7 +12,7 @@
     >
     <v-app-bar
       dark
-      color="blue darken-4"
+      color="red darken-4"
     >
       <v-toolbar-title>Pengguna</v-toolbar-title>
     </v-app-bar>
@@ -51,7 +51,7 @@
                 <v-btn
                 block
                 dark
-                color="blue darken-4"
+                color="red darken-4"
                 class="btn btn-primary rounded-lg text-capitalize mt-n6"
                 @click="SavePengguna()"
                 >
