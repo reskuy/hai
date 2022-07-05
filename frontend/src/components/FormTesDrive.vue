@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
-    <v-card class="mx-auto ma-2 pa-2" elevation="3">
+    <v-card class="mx-auto ma-2 pa-2" elevation="3" width="1150px">
+      <v-toolbar width="247px" color="red darken-4" dark class="mb-10 text-overline"><center><span>Form Pengajuan Tes Drive</span></center></v-toolbar>
     <v-row>
         <v-col cols="4">
         <v-subheader>Penanggung Jawab</v-subheader>
@@ -146,7 +147,7 @@
         <v-spacer/>
         <v-btn
           class="ma-2"
-          color="blue darken-2"
+          color="grey darken-2"
           dark
           @click="Save()"
         >
@@ -204,7 +205,18 @@ import api from "@/services/http"
       Save() {
         api.post('/formtesdrive',{
           IdAset:this.ModelKendaraan,
-          // IdDepartment:
+          IdDepartment:this.Department.id_department,
+          PenanggungJawab:this.PenanggungJawab,
+          NamaCustomer:this.NamaCustomer,
+          KondisiBBM:this.KondisiBBM,
+          KondisiKM:this.KondisiKilometer,
+          KondisiKebersihan:'Interior : '+this.KondisiAwalKebersihanInterior+' / Eksterior : '+this.KondisiAwalKebersihanEksterior,
+          KondisiFisik:this.KondisiFisik,
+          LokasiTesDrive:this.LokasiTesDrive,
+          TanggalPemakaian:this.TanggalPemakaian,
+        }).then(x=>{
+          this.Reset()
+          console.log(x)
         })
       },
       Reset(){
@@ -221,3 +233,8 @@ import api from "@/services/http"
     },
   }
 </script>
+<style scoped>
+body{
+  background-color:aqua;
+}
+</style>

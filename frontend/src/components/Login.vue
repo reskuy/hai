@@ -18,14 +18,18 @@
                               label="Username"
                               v-model="Username"
                               type="text"
+                              @keyup.enter="login()"
                            ></v-text-field>
                            <v-text-field
                               id="password"
+                              :append-icon="showpass ? 'mdi-eye' : 'mdi-eye-off'"
+                              :type="showpass ? 'text' : 'password'"
                               prepend-icon="mdi-lock"
                               name="password"
                               v-model="Password"
                               label="Password"
-                              type="password"
+                              @click:append="showpass = !showpass"
+                              @keyup.enter="login()"
                            ></v-text-field>
                      </v-card-text>
                      <v-col>
@@ -53,6 +57,7 @@ export default {
         return{
             loading:false,
             Username:null,
+            showpass:false,
             Password:null
         }
     },
@@ -67,6 +72,7 @@ export default {
     },
     methods:{
         login(){
+         if(this.Username != null && this.Password != null){
             let auth = {
                 username:this.Username,
                 password:this.Password
@@ -83,6 +89,9 @@ export default {
              this.loading = false
              this.$router.push('/')
            })
+         }else{
+            this.Toast('error','Pastikan Username Dan Password Terisi')
+         }
         },
         Toast(icon,title){
             this.$swal.fire({

@@ -1,15 +1,16 @@
 <template>
     <v-app-bar
       dark
-      color="blue darken-4"
-      v-show="showappbar == true"
+      elevation="6"
+      color="white"
+      v-show="showappbar == true && this.device == 'Desktop'"
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-      <v-btn @click="ChangeURL('')" icon><v-icon>mdi-home</v-icon></v-btn>
-      <v-toolbar-title>HAI</v-toolbar-title>
+      <v-btn @click="ChangeURL('')" icon><v-icon color="red darken-4">mdi-home</v-icon></v-btn>
+      <v-toolbar-title><span class="toolbar-text text-h6">HONDA AMARTHA INVENTORY</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <span v-show="userlogged" v-text="'Hi '+userlogged"></span>
+      <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
       <v-menu
       :rounded="true"
       offset-y
@@ -19,7 +20,7 @@
         v-bind="attrs"
         v-on="on"
         icon>
-            <v-icon>mdi-account</v-icon>
+            <v-icon color="red darken-4">mdi-account</v-icon>
         </v-btn>
       </template>
 
@@ -29,6 +30,7 @@
           :key="acc.text"
           :to="acc.to"
           link
+          color="red darken-4"
         >
           <v-list-item-title @click="ChangeURL(acc.to)" v-text="acc.text"/>
         </v-list-item>
@@ -41,6 +43,7 @@ import Vue from 'vue'
   export default {
     data: () => ({
     dialog:true,
+    device:null,
     department:localStorage.getItem('departmentlogged'),
     UserPengguna:null,
     showappbar:false,
@@ -57,6 +60,7 @@ import Vue from 'vue'
       ],
     }),
     mounted(){
+      this.device = this.$device
         let userlogged = localStorage.getItem('userlogged')
         let department=localStorage.getItem('departmentlogged')
         if(userlogged){
@@ -92,3 +96,8 @@ import Vue from 'vue'
     }
   }
 </script>
+<style scoped>
+.toolbar-text{
+  color:#b71c1c;
+}
+</style>

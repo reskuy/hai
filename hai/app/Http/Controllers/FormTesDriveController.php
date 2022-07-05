@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\FormTesDrive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FormTesDriveController extends Controller
 {
@@ -16,6 +17,13 @@ class FormTesDriveController extends Controller
     public function index()
     {
         return FormTesDrive::all();
+    }
+    public function count()
+    {
+        $data;
+        $data['totalform'] = DB::table('form_tes_drive')->count();
+        $data['approve'] = DB::table('form_tes_drive')->where('approve_form_tes_drive','!=',null)->count();
+        return response()->json($data);
     }
 
     /**
@@ -41,16 +49,17 @@ class FormTesDriveController extends Controller
         $u->id_department = $request->IdDepartment;
         $u->penanggung_jawab = $request->PenanggungJawab;
         $u->nama_customer = $request->NamaCustomer;
-        $u->kondis_awal_bbm= $request->KondisiBBM;
+        $u->kondisi_awal_bbm= $request->KondisiBBM;
         $u->kondisi_awal_kilometer= $request->KondisiKM;
         $u->kondisi_awal_kebersihan= $request->KondisiKebersihan;
         $u->kondisi_awal_fisik_kendaraan= $request->KondisiFisik;
         $u->lokasi_tes_drive = $request->LokasiTesDrive;
         $u->tanggal_pemakaian = $request->TanggalPemakaian;
-        $u->tanggal_kembali = $request->TanggalKembali;
+        $u->tanggal_kembali = null;
         $u->jam_keluar_kendaraan = null;
         $u->approve_form_tes_drive = null;
         $u->save();
+        return response()->json($u);
     }
 
     /**

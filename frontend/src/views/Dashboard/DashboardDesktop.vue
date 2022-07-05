@@ -1,6 +1,8 @@
 <template>
-<v-card
+<v-sheet
     class="mx-auto"
+    style="height:100vh"
+    :style="{backgroundColor:'#D3D3D3'}"
   >
 
     <v-dialog
@@ -66,8 +68,9 @@
   <v-row dense>
     <v-col cols="12" v-show="formhide == false">
         <v-card
-        color="#385F73"
-        dark
+        color="gray"
+        elevation="5"
+        outlined
         >
         <v-card-title class="text-h5">
             Buat Form
@@ -94,6 +97,7 @@
             class="ma-3 mb-3"
             max-width="344"
             outlined
+            elevation="6"
         >
             <v-list-item three-line>
             <v-list-item-content>
@@ -119,6 +123,7 @@
                 outlined
                 rounded
                 text
+                @click="ChangeURL(item.to)"
             >
                 Lihat Data
             </v-btn>
@@ -127,12 +132,12 @@
     </v-col>
   </v-row>
 </v-container>
-<v-footer>
+<v-footer elevation="4" app bottom fixed padless>
     <span>Versi : 1.0</span>
     <v-spacer/>
     <span>By Rifka Karin Afinda</span>
   </v-footer>
-</v-card>
+</v-sheet>
 </template>
 <script>
 import API from "@/services/http";
@@ -140,6 +145,10 @@ import API from "@/services/http";
     data: () => ({
     formhide:false,
     dialog:true,
+    // DataTesDrive:{
+    //   totalform:null,
+    //   approve:null
+    // },
     UserPengguna:null,
     Department:null,
     Departmentdata:[],
@@ -156,27 +165,27 @@ import API from "@/services/http";
       ],
       items: [
         {
-          color: '#1F7087',
+          color: 'red darken-4',
           icon: 'mdi-briefcase',
           title: 'Asset',
           data: 'Asset',
-          count:1,
+          count:null,
           to:'Asset'
         },
         {
-          color: '#1F7000',
+          color: 'red darken-4',
           icon: 'mdi-account',
           title: 'Peminjaman',
           data: 'Peminjaman',
-          count:1,
+          count:null,
           to:'Peminjaman'
         },
         {
-          color: '#1F7555',
+          color: 'red darken-4',
           icon: 'mdi-note',
           title: 'Tes Drive',
           data: 'Tes Drive',
-          count:1,
+          count:null,
           to:'TesDrive'
         },
       ],
@@ -185,6 +194,7 @@ import API from "@/services/http";
         let userlogged = localStorage.getItem('userlogged')
         let department=localStorage.getItem('departmentlogged')
         this.getDepartment()
+        this.getDataTesDrive()
         if(userlogged){
             this.dialog = false
             this.department=department
@@ -196,6 +206,12 @@ import API from "@/services/http";
           this.Departmentdata=x.data
         })
       },
+      getDataTesDrive(){
+        API.get("/totaltesdrive").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Tes Drive')
+          this.items[index].count = x.data.totalform
+        })
+      },
       LogOut(){
         localStorage.removeItem('userlogged')
         localStorage.removeItem('logged')
@@ -203,8 +219,12 @@ import API from "@/services/http";
         this.$router.go('/auth')
       },
       ChangeURL(x){
-        this.$router.push('/'+x)
-      }, 
+        if(this.$route.path == '/'+x){
+            return
+        }else{
+          return this.$router.push('/'+x)
+        }
+      },  
         SavePengguna(){
             let Department = this.Departmentdata.find(x=>x.id_department == this.Department)
             localStorage.setItem('userlogged',this.UserPengguna)

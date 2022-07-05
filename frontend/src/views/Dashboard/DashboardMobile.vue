@@ -1,5 +1,6 @@
 <template>
   <v-card
+  :style="{backgroundColor:'grey'}"
     max-width="400"
     class="mx-auto"
   >
@@ -38,7 +39,7 @@
                 <v-select
                   label="Pilih Department Anda*"
                   required
-                  item-value="nama_department"
+                  item-value="id_department"
                   item-text="nama_department"
                   :items="Departmentdata"
                   v-model="Department"
@@ -189,9 +190,11 @@ import API from "@/services/http";
         this.$router.push('/'+x)
       }, 
         SavePengguna(){
+          let Department = this.Departmentdata.find(x=>x.id_department == this.Department)
             localStorage.setItem('userlogged',this.UserPengguna)
-            localStorage.setItem('departmentlogged',this.Department)
+            localStorage.setItem('departmentlogged',JSON.stringify(Department))
             this.userlogged = this.UserPengguna
+            this.$logged()
             this.dialog = false
         }
     }

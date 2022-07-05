@@ -33,7 +33,9 @@ import Vue from 'vue'
       logged(){
         this.islogged = true
         this.$setLogged()
+        this.$setLoggedMobile()
       },
+
       loggedout(){
         this.islogged = false
       }
