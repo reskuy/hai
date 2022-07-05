@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
+    :items="DataTesDrive"
     sort-by="calories"
     class="elevation-1"
   >
@@ -32,14 +32,13 @@
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
       small
-        class="pa-2"
+        class="mr-2"
         @click="editItem(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
       small
-      class="pa-2"
         @click="deleteItem(item)"
       >
         mdi-delete
@@ -56,45 +55,32 @@
   </v-data-table>
 </template>
 <script>
+import API from "@/services/http";
   export default {
     data: () => ({
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
         {
           text: 'Penanggung Jawab',
           align: 'start',
-          sortable: false,
-          value: 'name',
+          value: 'penanggung_jawab',
         },
-        { text: 'Department', value: 'calories' },
-        { text: 'Nama Customer', value: 'fat' },
-        { text: 'Model Kendaraan', value: 'carbs' },
-        { text: 'No Pol', value: 'protein' },
-        { text: 'Kondisi Awal KM', value: 'protein' },
-        { text: 'Kondisi Awal BBM', value: 'protein' },
-        { text: 'Kondisi Awal Kebersihan', value: 'protein' },
-        { text: 'Kondisi Awal Fisik Kendaraan', value: 'protein' },
-        { text: 'Lokasi Tes Drive', value: 'protein' },
-        { text: 'Tanggal Pemakaian', value: 'protein' },
+        { text: 'Department', value: 'department.nama_department' },
+        { text: 'Nama Customer', value: 'nama_customer' },
+        { text: 'Model Kendaraan', value: 'aset.nama_aset' },
+        { text: 'No Pol', value: 'aset.no_plat' },
+        { text: 'Kondisi Awal KM', value: 'kondisi_awal_kilometer' },
+        { text: 'Kondisi Awal BBM', value: 'kondisi_awal_bbm' },
+        { text: 'Kondisi Awal Kebersihan', value: 'kondisi_awal_kebersihan' },
+        { text: 'Kondisi Awal Fisik Kendaraan', value: 'kondisi_awal_fisik_kendaraan' },
+        { text: 'Lokasi Tes Drive', value: 'lokasi_tes_drive' },
+        { text: 'Tanggal Pemakaian', value: 'tanggal_pemakaian' },
       ],
       desserts: [],
+      DataTesDrive:[],
       editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
     }),
 
     computed: {
@@ -104,19 +90,20 @@
     },
 
     watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+      //
     },
 
     created () {
       this.initialize()
+      this.getDataTesDrive()
     },
 
     methods: {
+      getDataTesDrive(){
+        API.get("/formtesdrive").then(x=>{
+          this.DataTesDrive = x.data
+        })
+      },
       initialize () {
         this.desserts = [
           {
@@ -190,48 +177,6 @@
             protein: 7,
           },
         ]
-      },
-
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
-        }
-        this.close()
       },
     },
   }

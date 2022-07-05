@@ -11,8 +11,12 @@ class FormTesDrive extends Model
     protected $guarded = [];
     protected $table = 'form_tes_drive';
     public $timestamps = false;
-    // public function perusahaan()
-    // {
-    //     return $this->belongsTo(Perusahaan::class,'KodePerusahaan','KodePerusahaan');
-    // }
+    public function department()
+    {
+        return $this->belongsTo(Department::class,'id_department','id_department');
+    }
+    public function aset()
+    {
+        return $this->belongsTo(Aset::class,'id_aset','id_aset');
+    }
 }

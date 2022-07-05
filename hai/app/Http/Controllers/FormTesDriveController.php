@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\FormTesDrive;
 use Illuminate\Http\Request;
+use App\Models\Department;
 use Illuminate\Support\Facades\DB;
 
 class FormTesDriveController extends Controller
@@ -16,7 +17,8 @@ class FormTesDriveController extends Controller
      */
     public function index()
     {
-        return FormTesDrive::all();
+        $data = FormTesDrive::with('department')->with('aset')->get();
+        return response()->json($data);
     }
     public function count()
     {
