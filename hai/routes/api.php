@@ -23,6 +23,7 @@ Route::resource('department', DepartmentController::class);
 Route::resource('aset', AsetController::class);
 Route::resource('formtesdrive', FormTesDriveController::class);
 Route::get('totaltesdrive',[FormTesDriveController::class,'count']);
+Route::get('totalaset',[AsetController::class,'count']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

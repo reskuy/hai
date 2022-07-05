@@ -32,7 +32,7 @@
           link
           color="red darken-4"
         >
-          <v-list-item-title @click="ChangeURL(acc.to)" v-text="acc.text"/>
+          <v-list-item-title color="red darken-4" @click="ChangeURL(acc.to)" v-text="acc.text"/>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -96,8 +96,3 @@ import Vue from 'vue'
     }
   }
 </script>
-<style scoped>
-.toolbar-text{
-  color:#b71c1c;
-}
-</style>

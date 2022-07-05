@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Aset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AsetController extends Controller
 {
@@ -18,6 +19,9 @@ class AsetController extends Controller
         return Aset::all();
     }
 
+    public function count(){
+        return DB::table('aset')->count();
+    }
     /**
      * Show the form for creating a new resource.
      *

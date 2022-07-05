@@ -1,7 +1,7 @@
 <template>
   <v-card
-  :style="{backgroundColor:'grey'}"
-    max-width="400"
+  :style="{backgroundColor:'#D3D3D3'}"
+  style="height:100vh"
     class="mx-auto"
   >
     
@@ -67,8 +67,9 @@
       <v-row dense>
         <v-col cols="12">
           <v-card
-            color="#385F73"
-            dark
+            color="gray"
+            elevation="5"
+            outlined
           >
             <v-card-title class="text-h5">
               Buat Form
@@ -92,6 +93,8 @@
           <v-card
             :color="item.color"
             dark
+            @click="ChangeURL(item.to)"
+            elevation="6"
           >
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
@@ -140,35 +143,38 @@ import API from "@/services/http";
       ],
       items: [
         {
-          color: '#1F7087',
+          color: 'red darken-4',
           icon: 'mdi-briefcase',
           title: 'Asset',
           data: 'Asset',
-          count:1,
+          count:null,
           to:'Asset'
         },
         {
-          color: '#1F7000',
+          color: 'red darken-4',
           icon: 'mdi-account',
           title: 'Peminjaman',
           data: 'Peminjaman',
-          count:1,
+          count:null,
           to:'Peminjaman'
         },
         {
-          color: '#1F7555',
+          color: 'red darken-4',
           icon: 'mdi-note',
           title: 'Tes Drive',
           data: 'Tes Drive',
-          count:1,
+          count:null,
           to:'TesDrive'
         },
       ],
     }),
+    created(){
+      this.getDepartment()
+      this.getDataTesDrive()
+    },
     mounted(){
         let userlogged = localStorage.getItem('userlogged')
         let department=localStorage.getItem('departmentlogged')
-        this.getDepartment()
         if(userlogged){
             this.dialog = false
             this.Department=department
@@ -180,6 +186,12 @@ import API from "@/services/http";
           this.Departmentdata=x.data
         })
       },
+      getDataTesDrive(){
+        API.get("/totaltesdrive").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Tes Drive')
+          this.items[index].count = x.data.totalform
+        })
+      },
       LogOut(){
         localStorage.removeItem('userlogged')
         localStorage.removeItem('logged')
@@ -187,8 +199,12 @@ import API from "@/services/http";
         this.$router.go('/auth')
       },
       ChangeURL(x){
-        this.$router.push('/'+x)
-      }, 
+        if(this.$route.path == '/'+x){
+            return
+        }else{
+          return this.$router.push('/'+x)
+        }
+      },  
         SavePengguna(){
           let Department = this.Departmentdata.find(x=>x.id_department == this.Department)
             localStorage.setItem('userlogged',this.UserPengguna)

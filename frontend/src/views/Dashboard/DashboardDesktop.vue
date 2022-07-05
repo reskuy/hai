@@ -167,10 +167,10 @@ import API from "@/services/http";
         {
           color: 'red darken-4',
           icon: 'mdi-briefcase',
-          title: 'Asset',
-          data: 'Asset',
+          title: 'Aset',
+          data: 'Aset',
           count:null,
-          to:'Asset'
+          to:'Aset'
         },
         {
           color: 'red darken-4',
@@ -190,11 +190,14 @@ import API from "@/services/http";
         },
       ],
     }),
+    created(){
+      this.getDepartment()
+      this.getDataAset()
+      this.getDataTesDrive()
+    },
     mounted(){
         let userlogged = localStorage.getItem('userlogged')
         let department=localStorage.getItem('departmentlogged')
-        this.getDepartment()
-        this.getDataTesDrive()
         if(userlogged){
             this.dialog = false
             this.department=department
@@ -210,6 +213,12 @@ import API from "@/services/http";
         API.get("/totaltesdrive").then(x=>{
           let index = this.items.findIndex(x=>x.title == 'Tes Drive')
           this.items[index].count = x.data.totalform
+        })
+      },
+      getDataAset(){
+        API.get("/totalaset").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Aset')
+          this.items[index].count = x.data
         })
       },
       LogOut(){

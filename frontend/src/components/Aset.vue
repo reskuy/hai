@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="DataTesDrive"
+    :items="DataAset"
     sort-by="calories"
     class="elevation-1"
   >
@@ -9,7 +9,7 @@
       <v-toolbar
         flat
       >
-        <v-toolbar-title>Data Tes Drive</v-toolbar-title>
+        <v-toolbar-title>Data Aset</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -62,23 +62,19 @@ import API from "@/services/http";
       headers: [
         { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
         {
-          text: 'Penanggung Jawab',
+          text: 'Jenis Aset',
           align: 'start',
-          value: 'penanggung_jawab',
+          value: 'jenis_aset',
         },
-        { text: 'Department', value: 'department.nama_department' },
-        { text: 'Nama Customer', value: 'nama_customer' },
-        { text: 'Model Kendaraan', value: 'aset.nama_aset' },
+        { text: 'Nama Aset', value: 'nama_aset' },
+        { text: 'Warna', value: 'warna' },
+        { text: 'No Pol', value: 'no_plat' },
         { text: 'No Pol', value: 'aset.no_plat' },
-        { text: 'Kondisi Awal KM', value: 'kondisi_awal_kilometer' },
-        { text: 'Kondisi Awal BBM', value: 'kondisi_awal_bbm' },
-        { text: 'Kondisi Awal Kebersihan', value: 'kondisi_awal_kebersihan' },
-        { text: 'Kondisi Awal Fisik Kendaraan', value: 'kondisi_awal_fisik_kendaraan' },
-        { text: 'Lokasi Tes Drive', value: 'lokasi_tes_drive' },
-        { text: 'Tanggal Pemakaian', value: 'tanggal_pemakaian' },
+        { text: 'Status Aset', value: 'status' },
+        { text: 'Kondisi Aset', value: 'kondisi_aset' },
       ],
       desserts: [],
-      DataTesDrive:[],
+      DataAset:[],
       editedIndex: -1,
     }),
 
@@ -93,13 +89,13 @@ import API from "@/services/http";
     },
 
     created () {
-      this.getDataTesDrive()
+      this.getDataAset()
     },
 
     methods: {
-      getDataTesDrive(){
-        API.get("/formtesdrive").then(x=>{
-          this.DataTesDrive = x.data
+      getDataAset(){
+        API.get("/aset").then(x=>{
+          this.DataAset = x.data
         })
       },
     },

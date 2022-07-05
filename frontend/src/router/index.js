@@ -5,6 +5,7 @@ const Login = () => import (/* webpackChunkName: "Login"*/ '../components/Login.
 const Dashboard = () => import (/* webpackChunkName: "Dashboard"*/ '../components/Dashboard.vue')
 const FormTesDrive = () => import (/* webpackChunkName: "FormTesDrive"*/ '../components/FormTesDrive.vue')
 const TesDrive = () => import (/* webpackChunkName: "TesDrive"*/ '../components/TesDrive.vue')
+const Aset = () => import (/* webpackChunkName: "Aset"*/ '../components/Aset.vue')
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,14 @@ const routes = [
     path: '/TesDrive',
     name: 'TesDrive',
     component: TesDrive,
+    meta: {
+      auth: false,
+    },
+  },
+  {
+    path: '/Aset',
+    name: 'Aset',
+    component: Aset,
     meta: {
       auth: false,
     },
