@@ -71,31 +71,7 @@
   .ScrollCSSHide::-webkit-scrollbar {
     display: none;
   }
-
-  .v-navigation-drawer {
-    will-change: initial;
-  }
-
-  .v-menu {
-    will-change: initial !important;
-  }
-
-  .NoneTransition {
-    transition: none !important
-  }
-  /* icon syncfusion */
-  .mata:before{ 
-    content:'\e345'; 
-    /* color: #2E7D32 !important; */
-  /* endof icon syncfusion */
-  } 
-  .e-edit:before{
-    color: #0D47A1 !important;
-  }
-  .e-delete:before{
-    color: red !important;
-  }
-  .e-pager .e-currentitem{
-    background: #D32F2F !important;
+  .toolbar-text{
+  color:#b71c1c;
   }
 </style>
