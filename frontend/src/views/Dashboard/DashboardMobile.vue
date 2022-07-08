@@ -1,10 +1,9 @@
 <template>
-  <v-card
-  :style="{backgroundColor:'#D3D3D3'}"
-  style="height:100vh"
+<v-sheet
     class="mx-auto"
-  >
-    
+    style="height:100vh"
+    :style="{backgroundColor:'#D3D3D3'}"
+  > 
     <v-dialog
       v-model="dialog"
       persistent
@@ -14,7 +13,7 @@
       dark
       color="red darken-4"
     >
-      <v-toolbar-title>Pengguna</v-toolbar-title>
+      <v-toolbar-title><v-icon class="mr-2">mdi-account</v-icon>Pengguna</v-toolbar-title>
     </v-app-bar>
     <v-card>
         <v-card-text>
@@ -64,69 +63,111 @@
     </v-card>
     </v-dialog>
     <v-container>
+      <v-alert class="pa-2 mb-2 text-end overline" dense
+            color="black"
+            border="bottom"
+            colored-border
+            elevation="5">{{time+' '+realtime}}</v-alert>
       <v-row dense>
-        <v-col cols="12">
-          <v-card
-            color="gray"
-            elevation="5"
-            outlined
-          >
-            <v-card-title class="text-h5">
+        <v-col cols="6">
+          <v-alert
+          @click="ChangeURL('FormTesDrive')"
+            dense
+            color="black"
+            border="bottom"
+            colored-border
+            elevation="5">
+            <v-card-title class="mb-n3">
+              <span id="teks-merah" class="text-h6 mx-n4">
+              <v-icon color="red darken-4">mdi-plus</v-icon>
               Buat Form
+              </span>
+             
             </v-card-title>
+             <span id="teks-merah" class="text-overline mx-7">Tes Drive</span>
+            <!-- <v-card-title>
+              <span class="text-h6 mx-n4">
+              <v-icon color="black">mdi-plus</v-icon>
+              Buat Form
+              </span>
+              <span class="caption mx-4">Tes Drive</span>
+            </v-card-title> -->
 
-            <v-card-subtitle>Ajukan Peminjaman Dan Tes Drive Secara Online.</v-card-subtitle>
+          </v-alert>
+        </v-col>
 
-            <v-card-actions>
-              <v-btn text @click="ChangeURL('formtesdrive')">
-                Buat Sekarang
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+        <v-col cols="6">
+          <v-alert
+            dense
+            color="black"
+            border="bottom"
+            colored-border
+            @click="ChangeURL('FormPeminjaman')"
+            elevation="5">
+            <v-card-title class="mb-n3">
+              <span id="teks-merah" class="text-h6 mx-n4">
+              <v-icon color="red darken-4">mdi-plus</v-icon>
+              Buat Form
+              </span>
+             
+            </v-card-title>
+             <span id="teks-merah" class="text-overline mx-5">Peminjaman</span>
+          </v-alert>
         </v-col>
 
         <v-col
           v-for="(item, i) in items"
           :key="i"
-          cols="12"
+          cols="6"
         >
-          <v-card
+        <v-alert
+        dense
+        color="red darken-4"
+        border="bottom"
+        @click="ChangeURL(item.to)"
+        colored-border
+        height="130px"
+        elevation="6">
+          <!-- <v-card
             :color="item.color"
             dark
             @click="ChangeURL(item.to)"
             elevation="6"
-          >
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title
-                  class="text-h5"
-                  v-text="item.title"
-                ></v-card-title>
-
-                <v-card-subtitle v-text="item.data"></v-card-subtitle>
-              </div>
-
+          > -->
+            <div class="d-flex flex-no-wrap justify-center">
               <v-avatar
-                class="ma-3"
-
-                tile
+              tile
+              class="mt-5"
               >
-              <v-icon>{{item.icon}}</v-icon>
-                <span>{{item.count}}</span>
-                <!-- <v-img :src="item.icon"></v-img> -->
+              <v-icon :color="item.color" large>{{item.icon}}</v-icon>
+                <!-- <span>{{item.count}}</span> -->
               </v-avatar>
+              <div>
+                <!-- <v-card-title
+                  class="text-h6"
+                  v-text="item.title"
+                ></v-card-title> -->
+                
+                <v-card-title class="test-h5 mt-4"><span>{{item.count}}</span></v-card-title>
+              </div>
+              
             </div>
-          </v-card>
+            <v-card-title class="overline justify-center mt-n4"><span>{{item.data}}</span></v-card-title>
+        </v-alert>
         </v-col>
       </v-row>
     </v-container>
-  </v-card>
+</v-sheet>
 </template>
 <script>
 import API from "@/services/http";
   export default {
     data: () => ({
     dialog:true,
+    value:true,
+    realtime:null,
+    time:null,
+    active:true,
     UserPengguna:null,
     Department:null,
     Departmentdata:[],
@@ -143,32 +184,36 @@ import API from "@/services/http";
       ],
       items: [
         {
-          color: 'red darken-4',
+          color: 'black',
           icon: 'mdi-briefcase',
-          title: 'Asset',
-          data: 'Asset',
-          count:null,
-          to:'Asset'
+          title: 'Aset',
+          data: 'Aset',
+          count:'-',
+          to:'Aset'
         },
         {
-          color: 'red darken-4',
+          color: 'black',
           icon: 'mdi-account',
           title: 'Peminjaman',
           data: 'Peminjaman',
-          count:null,
+          count:'-',
           to:'Peminjaman'
         },
         {
-          color: 'red darken-4',
-          icon: 'mdi-note',
+          color: 'black',
+          icon: 'mdi-car',
           title: 'Tes Drive',
           data: 'Tes Drive',
-          count:null,
+          count:'-',
           to:'TesDrive'
         },
       ],
     }),
     created(){
+      this.getTime()
+      this.startTime()
+      this.$loading(true)
+      this.getDataAset()
       this.getDepartment()
       this.getDataTesDrive()
     },
@@ -181,15 +226,26 @@ import API from "@/services/http";
         }
     },
     methods:{
-      getDepartment(){
-        API.get("/department").then(x=>{
-          this.Departmentdata=x.data
+      getTime(){
+        let hari = new Date().toISOString().substring(0,10)
+        this.time = hari
+      },
+      getDataAset(){
+        API.get("/totalaset").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Aset')
+          this.items[index].count = x.data
+          this.$loading(false)
         })
       },
       getDataTesDrive(){
         API.get("/totaltesdrive").then(x=>{
           let index = this.items.findIndex(x=>x.title == 'Tes Drive')
           this.items[index].count = x.data.totalform
+        })
+      },
+      getDepartment(){
+        API.get("/department").then(x=>{
+          this.Departmentdata=x.data
         })
       },
       LogOut(){
@@ -212,7 +268,29 @@ import API from "@/services/http";
             this.userlogged = this.UserPengguna
             this.$logged()
             this.dialog = false
+        },
+        startTime() {
+          const today = new Date();
+          let h = today.getHours();
+          let m = today.getMinutes();
+          let s = today.getSeconds();
+          m = this.checkTime(m);
+          s = this.checkTime(s);
+          this.realtime =  h + ":" + m + ":" + s;
+          setTimeout(this.startTime, 1000);
+        },
+
+        checkTime(i){
+          if (i < 10){
+            i = "0" + i
+            }
+          return i
         }
     }
   }
 </script>
+<style scoped>
+#teks-merah{
+  color:  #b71c1c;
+}
+</style>

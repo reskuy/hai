@@ -3,25 +3,32 @@
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
                   <v-card class="elevation-12">
+                    <v-app-bar
+                    dark
+                    color="red darken-2"
+                    >
+                    </v-app-bar>
                     <v-progress-linear
                         :active="loading"
                         :indeterminate="loading"
                         absolute
                         top
                         striped
-                        color="deep-purple accent-4"
+                        color="red darken-4"
                     />
                      <v-card-text>
                            <v-text-field
                               prepend-icon="mdi-account"
                               name="login"
                               label="Username"
+                              color="red darken-4"
                               v-model="Username"
                               type="text"
                               @keyup.enter="login()"
                            ></v-text-field>
                            <v-text-field
                               id="password"
+                              color="red darken-4"
                               :append-icon="showpass ? 'mdi-eye' : 'mdi-eye-off'"
                               :type="showpass ? 'text' : 'password'"
                               prepend-icon="mdi-lock"
@@ -36,7 +43,7 @@
                         <v-btn
                         block
                         dark
-                        color="blue darken-4"
+                        color="red darken-4"
                         class="btn btn-primary rounded-lg text-capitalize mt-n6"
                         @click="login()"
                         >
@@ -77,33 +84,24 @@ export default {
                 username:this.Username,
                 password:this.Password
             }
+            this.$loading(true)
             this.loading = true
            api.post('login',auth).then(x=>{
              if(x.data == 'error'){
-                this.Toast('error','Username Atau Password Salah')
+                this.$Toast('error','Username Atau Password Salah')
                 this.loading = false
+                this.$loading(false)
                 return
              }
              localStorage.setItem('logged',JSON.stringify(x.data))
-             this.Toast('success','Welcome')
+             this.$Toast('success','Welcome')
              this.loading = false
+             this.$loading(false)
              this.$router.push('/')
            })
          }else{
-            this.Toast('error','Pastikan Username Dan Password Terisi')
+            this.$Toast('error','Pastikan Username Dan Password Terisi')
          }
-        },
-        Toast(icon,title){
-            this.$swal.fire({
-            toast: true,
-            icon: icon,
-            title: title,
-            animation: false,
-            showCloseButton: true,
-            position: 'top-right',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true})
         },
     }
 }

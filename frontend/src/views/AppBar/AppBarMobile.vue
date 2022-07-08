@@ -1,8 +1,11 @@
 <template>
     <v-app-bar
       dark
+      :app="isMobile"
+      :fixed="isMobile"
       elevation="6"
       color="white"
+      class="mb-2"
       v-show="showappbar == true && device == 'Mobile'"
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
@@ -44,6 +47,7 @@ import Vue from 'vue'
     data: () => ({
     dialog:true,
     device:null,
+    isMobile:false,
     department:localStorage.getItem('departmentlogged'),
     UserPengguna:null,
     showappbar:false,
@@ -61,6 +65,9 @@ import Vue from 'vue'
     }),
     mounted(){
         this.device = this.$device
+        if(this.device == 'Mobile'){
+          this.isMobile = true
+        }
         let userlogged = localStorage.getItem('userlogged')
         let department=localStorage.getItem('departmentlogged')
         if(userlogged){

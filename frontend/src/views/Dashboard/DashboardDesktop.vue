@@ -4,17 +4,17 @@
     style="height:100vh"
     :style="{backgroundColor:'#D3D3D3'}"
   >
-
     <v-dialog
       v-model="dialog"
       persistent
+      width="500px"
       transition="dialog-top-transition"
     >
     <v-app-bar
       dark
       color="red darken-4"
     >
-      <v-toolbar-title>Pengguna</v-toolbar-title>
+      <v-toolbar-title><v-icon class="mr-2">mdi-account</v-icon>Pengguna</v-toolbar-title>
     </v-app-bar>
     <v-card>
         <v-card-text>
@@ -66,39 +66,59 @@
 
 <v-container>
   <v-row dense>
-    <v-col cols="12" v-show="formhide == false">
-        <v-card
-        color="gray"
-        elevation="5"
-        outlined
-        >
-        <v-card-title class="text-h5">
-            Buat Form
-            <v-spacer/>
-            <v-btn @click="formhide = true" icon>
-            <v-icon>mdi-close</v-icon>
-            </v-btn>
-        </v-card-title>
+    <v-col cols="12" sm="6" md="6">
+      <v-alert
+        dense
+        color="red darken-4"
+        border="bottom"
+        icon="mdi-note"
+        colored-border
+        elevation="5">
 
-        <v-card-subtitle>Ajukan Peminjaman Dan Tes Drive Secara Online.</v-card-subtitle>
+        <v-card-subtitle>Ajukan Tes Drive Secara Online.</v-card-subtitle>
 
         <v-card-actions>
             <v-btn @click="ChangeURL('formtesdrive')" text>
             Buat Sekarang
             </v-btn>
         </v-card-actions>
-        </v-card>
+        <!-- </v-card> -->
+        </v-alert>
+    </v-col>
+
+    <v-col cols="12" sm="6" md="6">
+      <v-alert
+        dense
+        color="red darken-4"
+        border="bottom"
+        icon="mdi-note"
+        colored-border>
+        <v-card-subtitle>Ajukan Peminjaman Secara Online.</v-card-subtitle>
+
+        <v-card-actions>
+            <v-btn @click="ChangeURL('formtesdrive')" text>
+            Buat Sekarang
+            </v-btn>
+        </v-card-actions>
+        <!-- </v-card> -->
+        </v-alert>
     </v-col>
 
     <v-col v-for="(item, i) in items"
           :key="i"
           cols="4">
-        <v-card
+        <v-alert
+        dense
+        color="red darken-4"
+        border="bottom"
+        colored-border
+        elevation="5">
+        <!-- <v-card
             class="ma-3 mb-3"
             max-width="344"
             outlined
             elevation="6"
-        >
+        > -->
             <v-list-item three-line>
             <v-list-item-content>
                 <!-- <div class="text-overline mb-4">
@@ -113,7 +133,7 @@
             <v-list-item-avatar
                 size="50"
                 dark
-                :color="item.color"
+                color="white"
             >
             <v-icon v-text="item.icon"/></v-list-item-avatar>
             </v-list-item>
@@ -128,7 +148,8 @@
                 Lihat Data
             </v-btn>
             </v-card-actions>
-        </v-card>
+        <!-- </v-card> -->
+        </v-alert>
     </v-col>
   </v-row>
 </v-container>
@@ -169,7 +190,7 @@ import API from "@/services/http";
           icon: 'mdi-briefcase',
           title: 'Aset',
           data: 'Aset',
-          count:null,
+          count:'-',
           to:'Aset'
         },
         {
@@ -177,7 +198,7 @@ import API from "@/services/http";
           icon: 'mdi-account',
           title: 'Peminjaman',
           data: 'Peminjaman',
-          count:null,
+          count:'-',
           to:'Peminjaman'
         },
         {
@@ -185,7 +206,7 @@ import API from "@/services/http";
           icon: 'mdi-note',
           title: 'Tes Drive',
           data: 'Tes Drive',
-          count:null,
+          count:'-',
           to:'TesDrive'
         },
       ],

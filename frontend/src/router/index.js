@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 const Login = () => import (/* webpackChunkName: "Login"*/ '../components/Login.vue')
 const Dashboard = () => import (/* webpackChunkName: "Dashboard"*/ '../components/Dashboard.vue')
 const FormTesDrive = () => import (/* webpackChunkName: "FormTesDrive"*/ '../components/FormTesDrive.vue')
+const FormPeminjaman = () => import (/* webpackChunkName: "FormPeminjaman"*/ '../components/FormPeminjaman.vue')
 const TesDrive = () => import (/* webpackChunkName: "TesDrive"*/ '../components/TesDrive.vue')
 const Aset = () => import (/* webpackChunkName: "Aset"*/ '../components/Aset.vue')
 
@@ -46,6 +47,14 @@ const routes = [
     path: '/Aset',
     name: 'Aset',
     component: Aset,
+    meta: {
+      auth: false,
+    },
+  },
+  {
+    path: '/FormPeminjaman',
+    name: 'FormPeminjaman',
+    component: FormPeminjaman,
     meta: {
       auth: false,
     },

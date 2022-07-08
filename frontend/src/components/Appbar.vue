@@ -1,6 +1,7 @@
 <template>
   <div>
   <AppBarMobile v-show="device == 'Mobile' && showappbar == true && islogged == true"/>
+  <BottomMobile v-show="device == 'Mobile' && showappbar == true"/>
   <AppBarDesktop v-show="device == 'Desktop' && showappbar == true && islogged == true"/>
   </div>
 </template>
@@ -8,9 +9,10 @@
 import Vue from 'vue'
   const AppBarDesktop = () => import (/* webpackChunkName: "AppBarDesktop"*/ '@/views/AppBar/AppBarDesktop.vue')
   const AppBarMobile = () => import (/* webpackChunkName: "AppBarMobile"*/ '@/views/AppBar/AppBarMobile.vue')
+  const BottomMobile = () => import (/* webpackChunkName: "BottomMobile"*/ '@/components/BottomMobile.vue')
   export default {
     components: {
-      AppBarDesktop,AppBarMobile
+      AppBarDesktop,AppBarMobile,BottomMobile
     },
     data: () => ({
         device:null,

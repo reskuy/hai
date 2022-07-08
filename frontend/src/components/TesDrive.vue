@@ -1,20 +1,28 @@
 <template>
+<v-card height="100hv">
   <v-data-table
     :headers="headers"
     :items="DataTesDrive"
-    sort-by="calories"
-    class="elevation-1"
+    :search="search"
+    class="elevation-4"
+    :custom-filter="filter"
   >
     <template v-slot:top>
       <v-toolbar
-        flat
+      color="red darken-4"
+      elevation="4"
+      dark
       >
         <v-toolbar-title>Data Tes Drive</v-toolbar-title>
         <v-divider
           class="mx-4"
-          inset
           vertical
         ></v-divider>
+        <v-text-field
+        class="mt-6"
+          v-model="search"
+          label="Pencarian"
+        ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
@@ -32,32 +40,39 @@
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
       small
-        class="mr-2"
+      class="ma-2"
         @click="editItem(item)"
       >
-        mdi-pencil
+        mdi-eye
       </v-icon>
-      <v-icon
+      <!-- <v-icon
       small
         @click="deleteItem(item)"
       >
         mdi-delete
+      </v-icon> -->
+    </template>
+    <template v-slot:[`item.approve_form_tes_drive`]="{ item }">
+      <v-icon
+      small
+      class="ma-2"
+      @click="editItem(item)"
+      >
+        mdi-finger
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-      >
-        Reset
-      </v-btn>
+      <span>Mohon Tunggu</span>
     </template>
   </v-data-table>
+</v-card>
 </template>
 <script>
 import API from "@/services/http";
   export default {
     data: () => ({
       dialog: false,
+      search:'',
       dialogDelete: false,
       headers: [
         { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
@@ -76,6 +91,7 @@ import API from "@/services/http";
         { text: 'Kondisi Awal Fisik Kendaraan', value: 'kondisi_awal_fisik_kendaraan' },
         { text: 'Lokasi Tes Drive', value: 'lokasi_tes_drive' },
         { text: 'Tanggal Pemakaian', value: 'tanggal_pemakaian' },
+        { text: 'Approve', value:'approve_form_tes_drive'}
       ],
       desserts: [],
       DataTesDrive:[],
@@ -83,9 +99,7 @@ import API from "@/services/http";
     }),
 
     computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
+      //
     },
 
     watch: {
@@ -97,9 +111,18 @@ import API from "@/services/http";
     },
 
     methods: {
+        filter (value, search) {
+        search = search.toString().toLocaleLowerCase()
+        return value != null &&
+          search != null &&
+          typeof value === 'string' &&
+          value.toString().toLocaleLowerCase().indexOf(search) !== -1
+      },
       getDataTesDrive(){
+        this.$loading(true)
         API.get("/formtesdrive").then(x=>{
           this.DataTesDrive = x.data
+          this.$loading(false)
         })
       },
     },

@@ -1,5 +1,11 @@
 <template>
   <v-app>
+    <v-overlay :value="overlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
     <v-main class="NoneTransition" :class="$vuetify.theme.dark ? 'black' : 'grey lighten-4'">
       <Appbar/>
       <router-view/>
@@ -22,6 +28,7 @@
     data () {
       return {
         device:null,
+        overlay:false,
         showappbar:false,
       }
     },
@@ -46,11 +53,27 @@
       }else{
         this.device = "Desktop"
       }
+      Vue.prototype.$loading = this.loading
       Vue.prototype.$device = this.device
+      Vue.prototype.$Toast = this.Toast
       //
     },
     methods:{
-      //
+      loading(v){
+        this.overlay = v
+      },
+      Toast(icon,title){
+          this.$swal.fire({
+          toast: true,
+          icon: icon,
+          title: title,
+          animation: false,
+          showCloseButton: true,
+          position: 'top-right',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true})
+      },
     },
     watch:{
       $route(){

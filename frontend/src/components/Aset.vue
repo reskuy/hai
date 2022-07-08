@@ -2,12 +2,15 @@
   <v-data-table
     :headers="headers"
     :items="DataAset"
-    sort-by="calories"
+    :search="search"
     class="elevation-1"
+    :custom-filter="filter"
   >
     <template v-slot:top>
       <v-toolbar
-        flat
+        color="red darken-4"
+        elevation="4"
+        dark
       >
         <v-toolbar-title>Data Aset</v-toolbar-title>
         <v-divider
@@ -15,6 +18,12 @@
           inset
           vertical
         ></v-divider>
+        <v-text-field
+          prepend-icon="mdi-magnify"
+          class="mt-6"
+          v-model="search"
+          label="Pencarian"
+        ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
@@ -69,12 +78,12 @@ import API from "@/services/http";
         { text: 'Nama Aset', value: 'nama_aset' },
         { text: 'Warna', value: 'warna' },
         { text: 'No Pol', value: 'no_plat' },
-        { text: 'No Pol', value: 'aset.no_plat' },
-        { text: 'Status Aset', value: 'status' },
+        { text: 'Status Aset', value: 'status_aset' },
         { text: 'Kondisi Aset', value: 'kondisi_aset' },
       ],
       desserts: [],
       DataAset:[],
+      search:'',
       editedIndex: -1,
     }),
 
@@ -89,13 +98,22 @@ import API from "@/services/http";
     },
 
     created () {
+      this.$loading(true)
       this.getDataAset()
     },
 
     methods: {
+      filter (value, search) {
+        search = search.toString().toLocaleLowerCase()
+        return value != null &&
+          search != null &&
+          typeof value === 'string' &&
+          value.toString().toLocaleLowerCase().indexOf(search) !== -1
+      },
       getDataAset(){
         API.get("/aset").then(x=>{
           this.DataAset = x.data
+          this.$loading(false)
         })
       },
     },

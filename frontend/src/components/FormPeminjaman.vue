@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-card class="mx-auto ma-2 pa-2" elevation="3" width="1150px">
-      <v-toolbar width="259px" color="red darken-4" dark class="mb-10 text-overline"><center><span>Form Pengajuan Tes Drive</span></center></v-toolbar>
+      <v-toolbar width="270px" color="red darken-4" dark class="mb-10 text-overline"><center><span>Form Pengajuan Peminjaman</span></center></v-toolbar>
     <v-row>
         <v-col cols="4">
         <v-subheader>Penanggung Jawab</v-subheader>
@@ -30,6 +30,24 @@
         <v-text-field
         label="Nama Sesuai STNK"
         v-model="NamaCustomer"/>
+      </v-col>
+      
+      <v-col cols="4">
+        <v-subheader>Tujuan</v-subheader>
+      </v-col>
+      <v-col cols="8">
+        <v-text-field
+        label="Isi Tujuan"
+        v-model="Tujuan"/>
+      </v-col>
+      
+      <v-col cols="4">
+        <v-subheader>Keperluan</v-subheader>
+      </v-col>
+      <v-col cols="8">
+        <v-text-field
+        label="Isi Keperluan"
+        v-model="Keperluan"/>
       </v-col>
 
       <v-col cols="4">
@@ -104,15 +122,6 @@
       </v-col>
 
       <v-col cols="4">
-        <v-subheader>Lokasi Tes Drive</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-        label="Sesuai Lokasi"
-        v-model="LokasiTesDrive"/>
-      </v-col>
-
-      <v-col cols="4">
         <v-subheader>Tanggal Pemakaian</v-subheader>
       </v-col>
       <v-col cols="8">
@@ -175,6 +184,8 @@ import api from "@/services/http"
       overlay:false,
       NoPol:null,
       select: null,
+      Tujuan:null,
+      Keperluan:null,
       ModelKendaraan:null,
       KondisiKilometer:null,
       KondisiBBM:null,
@@ -188,8 +199,7 @@ import api from "@/services/http"
       menu2: false,
       checkbox: false,
     }),
-    created(){
-      this.$loading(true)
+    mounted(){
       this.getAset()
     },
 
@@ -202,7 +212,6 @@ import api from "@/services/http"
       getAset(){
         api.get('/aset').then(x=>{
           this.AsetData = x.data
-          this.$loading(false)
         })
       },
       Save() {
