@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -25,6 +26,10 @@ class UserController extends Controller
         return User::all();
     }
 
+    public function count(){
+        return DB::table('user')->count();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -44,8 +49,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $u = new User;
-        $u->username = $request->username;
-        $u->password = $request->password;
+        $u->username = $request->Username;
+        $u->password = $request->Password;
         $u->save();
     }
 
@@ -80,7 +85,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $u = User::where('id_user',$id)
+            ->update([
+                'Username'=>$request->Username,
+                'password'=>$request->Password]);
+        return $u;
     }
 
     /**
@@ -91,6 +100,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return DB::table('user')->where('id_user',$id)->delete();
     }
 }

@@ -41,12 +41,12 @@ class AsetController extends Controller
     public function store(Request $request)
     {
         $u = new Aset;
-        $u->jenis_aset = $request->jenis_aset;
-        $u->nama_aset = $request->nama_aset;
-        $u->warna = $request->warna;
-        $u->no_plat = $request->no_plat;
-        $u->status_aset= $request->status_aset;
-        $u->kondisi_aset= $request->kondisi_aset;
+        $u->jenis_aset = $request->JenisAset;
+        $u->nama_aset = $request->NamaAset;
+        $u->warna = $request->Warna;
+        $u->no_plat = $request->NoPlat;
+        $u->status_aset= $request->StatusAset;
+        $u->kondisi_aset= $request->KondisiAset;
         $u->save();
     }
 
@@ -81,7 +81,15 @@ class AsetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $u = Aset::where('id_aset',$id)
+            ->update([
+                'jenis_aset'=>$request->JenisAset,
+                'nama_aset'=>$request->NamaAset,
+                'warna'=>$request->Warna,
+                'no_plat'=>$request->NoPlat,
+                'kondisi_aset'=>$request->KondisiAset,
+                'status_aset'=>$request->StatusAset]);
+        return $u;
     }
 
     /**
@@ -92,6 +100,6 @@ class AsetController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return DB::table('aset')->where('id_aset',$id)->delete();
     }
 }

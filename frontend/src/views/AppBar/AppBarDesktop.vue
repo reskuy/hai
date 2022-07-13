@@ -84,13 +84,10 @@ import Vue from 'vue'
         this.$router.push('/auth')
       },
       ChangeURL(x){
-        if(this.$route.path == '/'+x){
-            return
-        }
         if(x == 'auth'){
           return this.LogOut()
         }else{
-          return this.$router.push('/'+x)
+          return this.$ChangeURL(x)
         }
       }, 
     }

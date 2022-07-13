@@ -29,20 +29,11 @@ export default {
         }
     },
     mounted(){
-        console.log('bottom')
+        //
     },
     methods:{
-         ChangeURL(x){
-        let route = '/'+x
-        if(this.$route.path == route){
-            return
-        }
-        if(x == 'auth'){
-          return this.LogOut()
-        }else{
-          this.value = route
-          return this.$router.push(route)
-        }
+      ChangeURL(x){
+        this.$ChangeURL(x)
       }, 
     }
 }

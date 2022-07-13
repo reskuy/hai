@@ -222,6 +222,7 @@ import api from "@/services/http"
           this.Reset()
           console.log(x)
           this.overlay = false
+          this.$ChangeURL('TesDrive')
           this.$Toast('success','Pengajuan Dibuat')
         })
       },
@@ -241,6 +242,7 @@ import api from "@/services/http"
         this.KondisiAwalKebersihanEksterior = null
         this.KondisiFisik = null
         this.TanggalPemakaian = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+        this.LokasiTesDrive = null
       },
     },
   }

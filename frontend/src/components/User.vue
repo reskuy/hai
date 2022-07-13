@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="DataAset"
+    :items="DataUser"
     :search="search"
     class="elevation-1"
     :custom-filter="filter"
@@ -12,7 +12,7 @@
         elevation="4"
         dark
       >
-        <v-toolbar-title>Data Aset</v-toolbar-title>
+        <v-toolbar-title>Data User</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -25,7 +25,7 @@
           label="Pencarian"
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn class="ma-2" color="red darken-4" @click="ChangeURL('FormDataAset')" elevation="6" dark><v-icon>mdi-plus</v-icon></v-btn>
+        <v-btn class="ma-2" color="red darken-4" @click="ChangeURL('FormDataUser')" elevation="6" dark><v-icon>mdi-plus</v-icon></v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-toolbar color="red darken-4" dark><span class="text-overline"><v-icon>mdi-alert</v-icon></span></v-toolbar>
@@ -72,19 +72,11 @@ import API from "@/services/http";
       dialogDelete: false,
       headers: [
         { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
-        {
-          text: 'Jenis Aset',
-          align: 'start',
-          value: 'jenis_aset',
-        },
-        { text: 'Nama Aset', value: 'nama_aset' },
-        { text: 'Warna', value: 'warna' },
-        { text: 'No Pol', value: 'no_plat' },
-        { text: 'Status Aset', value: 'status_aset' },
-        { text: 'Kondisi Aset', value: 'kondisi_aset' },
+        { text: 'Username', value: 'username' },
+        { text: 'Password', value: 'password' },
       ],
       desserts: [],
-      DataAset:[],
+      DataUser:[],
       search:'',
       editedIndex: -1,
     }),
@@ -101,17 +93,26 @@ import API from "@/services/http";
 
     created () {
       this.$loading(true)
-      this.getDataAset()
+      this.getDataUser()
     },
 
     methods: {
     editItem(x){
+      console.log(x)
       this.$Store(x)
-      this.ChangeURL('FormDataAset')
+      this.ChangeURL('FormDataUser')
+    },
+    deleteItem(x){
+      API.delete('/user/'+x.id_user).then(x=>{
+        console.log(x)
+          this.$Toast('success','Data Berhasil Dihapus')
+          this.$loading(true)
+          this.getDataUser()
+      })
     },
     DeleteDialog(x){
-        this.$Store(x)
-        this.dialogDelete = true
+      this.$Store(x)
+      this.dialogDelete = true
     },
     BatalHapus(){
       this.$Store(null)
@@ -123,22 +124,29 @@ import API from "@/services/http";
       this.deleteItem(z)
       this.$Store(null)
     },
-    ChangeURL(x){
-      this.$ChangeURL(x)
-    },
-    filter(value, search){
-      search = search.toString().toLocaleLowerCase()
-      return value != null &&
-      search != null &&
-      typeof value === 'string' &&
-      value.toString().toLocaleLowerCase().indexOf(search) !== -1
-    },
-    getDataAset(){
-      API.get("/aset").then(x=>{
-      this.DataAset = x.data
-      this.$loading(false)
-      })
-    },
+      filter (value, search) {
+        search = search.toString().toLocaleLowerCase()
+        return value != null &&
+          search != null &&
+          typeof value === 'string' &&
+          value.toString().toLocaleLowerCase().indexOf(search) !== -1
+      },
+      ChangeURL(x){
+        if(this.$route.path == '/'+x){
+            return
+        }
+        if(x == 'auth'){
+          return this.LogOut()
+        }else{
+          return this.$router.push('/'+x)
+        }
+      }, 
+      getDataUser(){
+        API.get("/user").then(x=>{
+          this.DataUser = x.data
+          this.$loading(false)
+        })
+      },
     },
   }
 </script>

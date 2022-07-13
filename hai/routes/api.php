@@ -26,6 +26,8 @@ Route::resource('formtesdrive', FormTesDriveController::class);
 Route::resource('formpeminjaman', FormPeminjamanController::class);
 Route::get('totaltesdrive',[FormTesDriveController::class,'count']);
 Route::get('totalaset',[AsetController::class,'count']);
+Route::get('totaluser',[UserController::class,'count']);
+Route::get('totalpeminjaman',[FormPeminjamanController::class,'count']);
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });

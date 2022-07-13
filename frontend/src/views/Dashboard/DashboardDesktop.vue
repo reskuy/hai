@@ -65,6 +65,11 @@
     </v-dialog>
 
 <v-container>
+  <v-alert class="pa-2 mb-2 text-end overline" dense
+            color="black"
+            border="bottom"
+            colored-border
+            elevation="5">{{time+' '+realtime}}</v-alert>
   <v-row dense>
     <v-col cols="12" sm="6" md="6">
       <v-alert
@@ -78,7 +83,7 @@
         <v-card-subtitle>Ajukan Tes Drive Secara Online.</v-card-subtitle>
 
         <v-card-actions>
-            <v-btn @click="ChangeURL('formtesdrive')" text>
+            <v-btn @click="ChangeURL('FormTesDrive')" text>
             Buat Sekarang
             </v-btn>
         </v-card-actions>
@@ -96,7 +101,7 @@
         <v-card-subtitle>Ajukan Peminjaman Secara Online.</v-card-subtitle>
 
         <v-card-actions>
-            <v-btn @click="ChangeURL('formtesdrive')" text>
+            <v-btn @click="ChangeURL('FormPeminjaman')" text>
             Buat Sekarang
             </v-btn>
         </v-card-actions>
@@ -166,10 +171,8 @@ import API from "@/services/http";
     data: () => ({
     formhide:false,
     dialog:true,
-    // DataTesDrive:{
-    //   totalform:null,
-    //   approve:null
-    // },
+    realtime:null,
+    time:null,
     UserPengguna:null,
     Department:null,
     Departmentdata:[],
@@ -184,37 +187,18 @@ import API from "@/services/http";
             text:'Pengaturan'
         }
       ],
-      items: [
-        {
-          color: 'red darken-4',
-          icon: 'mdi-briefcase',
-          title: 'Aset',
-          data: 'Aset',
-          count:'-',
-          to:'Aset'
-        },
-        {
-          color: 'red darken-4',
-          icon: 'mdi-account',
-          title: 'Peminjaman',
-          data: 'Peminjaman',
-          count:'-',
-          to:'Peminjaman'
-        },
-        {
-          color: 'red darken-4',
-          icon: 'mdi-note',
-          title: 'Tes Drive',
-          data: 'Tes Drive',
-          count:'-',
-          to:'TesDrive'
-        },
-      ],
+      items: [],
     }),
     created(){
-      this.getDepartment()
+      this.items = this.$ItemDashboard
+      this.getTime()
+      this.startTime()
+      this.$loading(true)
       this.getDataAset()
       this.getDataTesDrive()
+      this.getDataPeminjaman()
+      this.getDepartment()
+      this.getDataUser()
     },
     mounted(){
         let userlogged = localStorage.getItem('userlogged')
@@ -225,21 +209,38 @@ import API from "@/services/http";
         }
     },
     methods:{
-      getDepartment(){
-        API.get("/department").then(x=>{
-          this.Departmentdata=x.data
+      getTime(){
+        let hari = new Date().toISOString().substring(0,10)
+        this.time = hari
+      },
+      getDataUser(){
+        API.get("totaluser").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'User')
+          this.items[index].count = x.data
+        })
+      },
+      getDataAset(){
+        API.get("totalaset").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Aset')
+          this.items[index].count = x.data
+          this.$loading(false)
         })
       },
       getDataTesDrive(){
-        API.get("/totaltesdrive").then(x=>{
+        API.get("totaltesdrive").then(x=>{
           let index = this.items.findIndex(x=>x.title == 'Tes Drive')
           this.items[index].count = x.data.totalform
         })
       },
-      getDataAset(){
-        API.get("/totalaset").then(x=>{
-          let index = this.items.findIndex(x=>x.title == 'Aset')
-          this.items[index].count = x.data
+      getDataPeminjaman(){
+        API.get("totalpeminjaman").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Peminjaman')
+          this.items[index].count = x.data.totalform
+        })
+      },
+      getDepartment(){
+        API.get("/department").then(x=>{
+          this.Departmentdata=x.data
         })
       },
       LogOut(){
@@ -249,19 +250,32 @@ import API from "@/services/http";
         this.$router.go('/auth')
       },
       ChangeURL(x){
-        if(this.$route.path == '/'+x){
-            return
-        }else{
-          return this.$router.push('/'+x)
-        }
-      },  
-        SavePengguna(){
-            let Department = this.Departmentdata.find(x=>x.id_department == this.Department)
-            localStorage.setItem('userlogged',this.UserPengguna)
-            localStorage.setItem('departmentlogged',JSON.stringify(Department))
-            this.userlogged = this.UserPengguna
-            this.$logged()
-            this.dialog = false
+        this.$ChangeURL(x)
+      },
+      SavePengguna(){
+        let Department = this.Departmentdata.find(x=>x.id_department == this.Department)
+        localStorage.setItem('userlogged',this.UserPengguna)
+        localStorage.setItem('departmentlogged',JSON.stringify(Department))
+        this.userlogged = this.UserPengguna
+        this.$logged()
+        this.dialog = false
+      },
+      startTime() {
+          const today = new Date();
+          let h = today.getHours();
+          let m = today.getMinutes();
+          let s = today.getSeconds();
+          m = this.checkTime(m);
+          s = this.checkTime(s);
+          this.realtime =  h + ":" + m + ":" + s;
+          setTimeout(this.startTime, 1000);
+        },
+
+        checkTime(i){
+          if (i < 10){
+            i = "0" + i
+            }
+          return i
         }
     }
   }

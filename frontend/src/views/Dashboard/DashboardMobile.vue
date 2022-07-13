@@ -182,40 +182,18 @@ import API from "@/services/http";
             text:'Pengaturan'
         }
       ],
-      items: [
-        {
-          color: 'black',
-          icon: 'mdi-briefcase',
-          title: 'Aset',
-          data: 'Aset',
-          count:'-',
-          to:'Aset'
-        },
-        {
-          color: 'black',
-          icon: 'mdi-account',
-          title: 'Peminjaman',
-          data: 'Peminjaman',
-          count:'-',
-          to:'Peminjaman'
-        },
-        {
-          color: 'black',
-          icon: 'mdi-car',
-          title: 'Tes Drive',
-          data: 'Tes Drive',
-          count:'-',
-          to:'TesDrive'
-        },
-      ],
+      items: [],
     }),
     created(){
+      this.$loading(true)
+      this.items = this.$ItemDashboard
       this.getTime()
       this.startTime()
-      this.$loading(true)
       this.getDataAset()
-      this.getDepartment()
+      this.getDataPeminjaman()
       this.getDataTesDrive()
+      this.getDataUser()
+      this.getDepartment()
     },
     mounted(){
         let userlogged = localStorage.getItem('userlogged')
@@ -230,11 +208,23 @@ import API from "@/services/http";
         let hari = new Date().toISOString().substring(0,10)
         this.time = hari
       },
+      getDataUser(){
+        API.get("/totaluser").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'User')
+          this.items[index].count = x.data
+        })
+      },
       getDataAset(){
         API.get("/totalaset").then(x=>{
           let index = this.items.findIndex(x=>x.title == 'Aset')
           this.items[index].count = x.data
           this.$loading(false)
+        })
+      },
+      getDataPeminjaman(){
+        API.get("totalpeminjaman").then(x=>{
+          let index = this.items.findIndex(x=>x.title == 'Peminjaman')
+          this.items[index].count = x.data.totalform
         })
       },
       getDataTesDrive(){
@@ -255,11 +245,7 @@ import API from "@/services/http";
         this.$router.go('/auth')
       },
       ChangeURL(x){
-        if(this.$route.path == '/'+x){
-            return
-        }else{
-          return this.$router.push('/'+x)
-        }
+        this.$ChangeURL(x)
       },  
         SavePengguna(){
           let Department = this.Departmentdata.find(x=>x.id_department == this.Department)

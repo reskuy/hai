@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-
+// import firebase from "firebase/app";
+// import "firebase/messaging";
 import { register } from 'register-service-worker'
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development') {
@@ -11,7 +12,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'developme
       )
     },
     registered () {
-      console.log('Service worker has been registered.')
+      // messaging.useServiceWorker(registration);
     },
     cached () {
       console.log('Content has been cached for offline use.')
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'developme
       console.error('Error during service worker registration:', error)
     }
   })
+  
 }
 
 

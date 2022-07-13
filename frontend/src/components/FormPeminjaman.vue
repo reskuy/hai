@@ -24,20 +24,11 @@
       </v-col>
 
       <v-col cols="4">
-        <v-subheader>Nama Customer</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-        label="Nama Sesuai STNK"
-        v-model="NamaCustomer"/>
-      </v-col>
-      
-      <v-col cols="4">
         <v-subheader>Tujuan</v-subheader>
       </v-col>
       <v-col cols="8">
         <v-text-field
-        label="Isi Tujuan"
+        label="Tujuan"
         v-model="Tujuan"/>
       </v-col>
       
@@ -46,7 +37,7 @@
       </v-col>
       <v-col cols="8">
         <v-text-field
-        label="Isi Keperluan"
+        label="Keperluan"
         v-model="Keperluan"/>
       </v-col>
 
@@ -132,8 +123,8 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="TanggalPemakaian"
-              label="Tanggal Pemakaian"
+              v-model="TanggalPeminjaman"
+              label="Tanggal Peminjaman"
               prepend-icon="mdi-calendar"
               readonly
               v-bind="attrs"
@@ -141,7 +132,7 @@
             ></v-text-field>
           </template>
           <v-date-picker
-            v-model="TanggalPemakaian"
+            v-model="TanggalPeminjaman"
             @input="menu2 = false"
           ></v-date-picker>
         </v-menu>
@@ -193,7 +184,7 @@ import api from "@/services/http"
       KondisiAwalKebersihanEksterior:null,
       KondisiFisik:null,
       LokasiTesDrive:null,
-      TanggalPemakaian:(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      TanggalPeminjaman:(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu: false,
       modal: false,
       menu2: false,
@@ -210,27 +201,28 @@ import api from "@/services/http"
     },
     methods: {
       getAset(){
-        api.get('/aset').then(x=>{
+        api.get('aset').then(x=>{
           this.AsetData = x.data
         })
       },
       Save() {
         this.overlay = true
-        api.post('/formtesdrive',{
+        api.post('formpeminjaman',{
           IdAset:this.ModelKendaraan,
           IdDepartment:this.Department.id_department,
           PenanggungJawab:this.PenanggungJawab,
-          NamaCustomer:this.NamaCustomer,
-          KondisiBBM:this.KondisiBBM,
-          KondisiKM:this.KondisiKilometer,
-          KondisiKebersihan:'Interior : '+this.KondisiAwalKebersihanInterior+' / Eksterior : '+this.KondisiAwalKebersihanEksterior,
-          KondisiFisik:this.KondisiFisik,
-          LokasiTesDrive:this.LokasiTesDrive,
-          TanggalPemakaian:this.TanggalPemakaian,
+          Keperluan:this.Keperluan,
+          Tujuan:this.Tujuan,
+          KondisiAwalBBM:this.KondisiBBM,
+          KondisiAwalKilometer:this.KondisiKilometer,
+          KondisiAwalKebersihan:'Interior : '+this.KondisiAwalKebersihanInterior+' / Eksterior : '+this.KondisiAwalKebersihanEksterior,
+          KondisiAwalFisikKendaraan:this.KondisiFisik,
+          TglPeminjaman:this.TanggalPeminjaman,
         }).then(x=>{
           this.Reset()
           console.log(x)
           this.overlay = false
+          this.$ChangeURL('Peminjaman')
           this.$Toast('success','Pengajuan Dibuat')
         })
       },
@@ -241,6 +233,8 @@ import api from "@/services/http"
         return x.id_aset
       },
       Reset(){
+        this.Keperluan = null
+        this.Tujuan = null
         this.NamaCustomer = null
         this.ModelKendaraan = null
         this.NoPol = null
@@ -249,7 +243,7 @@ import api from "@/services/http"
         this.KondisiAwalKebersihanInterior = null
         this.KondisiAwalKebersihanEksterior = null
         this.KondisiFisik = null
-        this.TanggalPemakaian = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+        this.TanggalPeminjaman = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
       },
     },
   }

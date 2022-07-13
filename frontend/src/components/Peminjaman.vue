@@ -2,7 +2,7 @@
 <v-card height="100hv">
   <v-data-table
     :headers="headers"
-    :items="DataTesDrive"
+    :items="DataPeminjaman"
     :search="search"
     class="elevation-4"
     :custom-filter="filter"
@@ -13,7 +13,7 @@
       elevation="4"
       dark
       >
-        <v-toolbar-title>Data Tes Drive</v-toolbar-title>
+        <v-toolbar-title>Data Peminjaman</v-toolbar-title>
         <v-divider
           class="mx-4"
           vertical
@@ -82,19 +82,21 @@ import API from "@/services/http";
           value: 'penanggung_jawab',
         },
         { text: 'Department', value: 'department.nama_department' },
-        { text: 'Nama Customer', value: 'nama_customer' },
+        { text: 'Tujuan', value: 'tujuan' },
+        { text: 'Keperluan', value: 'keperluan'},
+        { text: 'Tanggal Peminjaman', value: 'tgl_peminjaman'},
+        { text: 'Tanggal Pengembalian', value: 'tgl_pengembalian'},
+        { text: 'Jam Keluar Kendaraan', value: 'jam_keluar_kendaraan'},
         { text: 'Model Kendaraan', value: 'aset.nama_aset' },
         { text: 'No Pol', value: 'aset.no_plat' },
         { text: 'Kondisi Awal KM', value: 'kondisi_awal_kilometer' },
         { text: 'Kondisi Awal BBM', value: 'kondisi_awal_bbm' },
         { text: 'Kondisi Awal Kebersihan', value: 'kondisi_awal_kebersihan' },
         { text: 'Kondisi Awal Fisik Kendaraan', value: 'kondisi_awal_fisik_kendaraan' },
-        { text: 'Lokasi Tes Drive', value: 'lokasi_tes_drive' },
-        { text: 'Tanggal Pemakaian', value: 'tanggal_pemakaian' },
-        { text: 'Approve', value:'approve_form_tes_drive'}
+        { text: 'Approve', value:'approve_peminjaman'}
       ],
       desserts: [],
-      DataTesDrive:[],
+      DataPeminjaman:[],
       editedIndex: -1,
     }),
 
@@ -107,7 +109,7 @@ import API from "@/services/http";
     },
 
     created () {
-      this.getDataTesDrive()
+      this.getDataPeminjaman()
     },
 
     methods: {
@@ -118,10 +120,10 @@ import API from "@/services/http";
           typeof value === 'string' &&
           value.toString().toLocaleLowerCase().indexOf(search) !== -1
       },
-      getDataTesDrive(){
+      getDataPeminjaman(){
         this.$loading(true)
-        API.get("/formtesdrive").then(x=>{
-          this.DataTesDrive = x.data.reverse()
+        API.get("/formpeminjaman").then(x=>{
+          this.DataPeminjaman = x.data.reverse()
           this.$loading(false)
         })
       },

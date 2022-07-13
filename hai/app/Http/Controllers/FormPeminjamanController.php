@@ -24,7 +24,7 @@ class FormPeminjamanController extends Controller
     {
         $data;
         $data['totalform'] = DB::table('form_peminjaman')->count();
-        $data['approve'] = DB::table('form_peminjaman')->where('approve_form_peminjaman','!=',null)->count();
+        $data['approve'] = DB::table('form_peminjaman')->where('approve_peminjaman','!=',null)->count();
         return response()->json($data);
     }
 
@@ -50,16 +50,16 @@ class FormPeminjamanController extends Controller
         $u->id_aset = $request->IdAset;
         $u->id_department = $request->IdDepartment;
         $u->penanggung_jawab = $request->PenanggungJawab;
-        $u->nama_customer = $request->NamaCustomer;
-        $u->kondisi_awal_bbm= $request->KondisiBBM;
-        $u->kondisi_awal_kilometer= $request->KondisiKM;
-        $u->kondisi_awal_kebersihan= $request->KondisiKebersihan;
-        $u->kondisi_awal_fisik_kendaraan= $request->KondisiFisik;
-        $u->lokasi_tes_drive = $request->LokasiTesDrive;
-        $u->tanggal_pemakaian = $request->TanggalPemakaian;
-        $u->tanggal_kembali = null;
-        $u->jam_keluar_kendaraan = null;
-        $u->approve_form_tes_drive = null;
+        $u->tujuan = $request->Tujuan;
+        $u->keperluan = $request->Keperluan;
+        $u->tgl_peminjaman = $request->TglPeminjaman;
+        $u->tgl_pengembalian = $request->TglPengembalian;
+        $u->jam_keluar_kendaraan = $request->JamKeluarKendaraan;
+        $u->kondisi_awal_bbm = $request->KondisiAwalBBM;
+        $u->kondisi_awal_kilometer = $request->KondisiAwalKilometer;
+        $u->kondisi_awal_kebersihan = $request->KondisiAwalKebersihan;
+        $u->kondisi_awal_fisik_kendaraan = $request->KondisiAwalFisikKendaraan;
+        $u->approve_peminjaman = null;
         $u->save();
         return response()->json($u);
     }
