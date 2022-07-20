@@ -9,9 +9,10 @@
       v-show="showappbar == true && device == 'Mobile'"
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-      <v-btn @click="ChangeURL('')" icon><v-icon color="red darken-4">mdi-home</v-icon></v-btn>
+      <!-- <v-btn @click="ChangeURL('')" icon><v-icon color="red darken-4">mdi-home</v-icon></v-btn> -->
+      <v-btn @click="ChangeURL('')" icon><v-img src="@/assets/logo-honda-1.png" max-width="37" class="ml-2"></v-img></v-btn>
 
-      <v-toolbar-title ><span class="toolbar-text text-h6">HAI</span></v-toolbar-title>
+      <v-toolbar-title class="mx-n4"><span class="toolbar-text text-h6">HAI</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
        <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
@@ -24,7 +25,7 @@
         v-bind="attrs"
         v-on="on"
         icon>
-            <v-icon color="red darken-4">mdi-account</v-icon>
+            <v-icon color="red darken-4">mdi-account-hard-hat</v-icon>
         </v-btn>
       </template>
 

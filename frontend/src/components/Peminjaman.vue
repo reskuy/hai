@@ -8,8 +8,8 @@
     :custom-filter="filter"
   >
     <template v-slot:top>
-      <v-toolbar
-      color="red darken-4"
+      <v-toolbar class="mb-3"
+      color="#a10115"
       elevation="4"
       dark
       >
@@ -19,6 +19,7 @@
           vertical
         ></v-divider>
         <v-text-field
+        prepend-icon="mdi-magnify"
         class="mt-6"
           v-model="search"
           label="Pencarian"
@@ -52,13 +53,23 @@
         mdi-delete
       </v-icon> -->
     </template>
-    <template v-slot:[`item.approve_form_tes_drive`]="{ item }">
+    <template v-slot:[`item.approve_peminjaman`]="{ item }">
       <v-icon
       small
+      color="green"
       class="ma-2"
-      @click="editItem(item)"
+      @click="acc(item)"
       >
-        mdi-finger
+        mdi-check-outline
+      </v-icon>
+      <v-divider/>
+      <v-icon
+      small
+      color="red"
+      class="ma-2"
+      @click="cancel(item)"
+      >
+        mdi-close-outline
       </v-icon>
     </template>
     <template v-slot:no-data>
@@ -75,25 +86,17 @@ import API from "@/services/http";
       search:'',
       dialogDelete: false,
       headers: [
-        { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
+        { text: 'Tanggal Peminjaman', value: 'TanggalPeminjaman'},
         {
           text: 'Penanggung Jawab',
           align: 'start',
           value: 'penanggung_jawab',
         },
         { text: 'Department', value: 'department.nama_department' },
-        { text: 'Tujuan', value: 'tujuan' },
-        { text: 'Keperluan', value: 'keperluan'},
-        { text: 'Tanggal Peminjaman', value: 'tgl_peminjaman'},
-        { text: 'Tanggal Pengembalian', value: 'tgl_pengembalian'},
-        { text: 'Jam Keluar Kendaraan', value: 'jam_keluar_kendaraan'},
         { text: 'Model Kendaraan', value: 'aset.nama_aset' },
         { text: 'No Pol', value: 'aset.no_plat' },
-        { text: 'Kondisi Awal KM', value: 'kondisi_awal_kilometer' },
-        { text: 'Kondisi Awal BBM', value: 'kondisi_awal_bbm' },
-        { text: 'Kondisi Awal Kebersihan', value: 'kondisi_awal_kebersihan' },
-        { text: 'Kondisi Awal Fisik Kendaraan', value: 'kondisi_awal_fisik_kendaraan' },
-        { text: 'Approve', value:'approve_peminjaman'}
+        { text: 'Actions', value: 'actions', sortable: false , align: 'center',},
+        { text: 'Approve', value:'approve_peminjaman', sortable: false , align: 'center',}
       ],
       desserts: [],
       DataPeminjaman:[],
@@ -123,10 +126,21 @@ import API from "@/services/http";
       getDataPeminjaman(){
         this.$loading(true)
         API.get("/formpeminjaman").then(x=>{
+          x.data.forEach(z => {
+            z.TanggalPeminjaman = this.$DateConvert(z.tgl_peminjaman)
+          });
           this.DataPeminjaman = x.data.reverse()
           this.$loading(false)
         })
       },
+      acc(x){
+        console.log(x)
+        alert('acc')
+      },
+      cancel(x){
+        console.log(x)
+        alert('cancel')
+      }
     },
   }
 </script>

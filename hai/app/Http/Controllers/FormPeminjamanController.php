@@ -20,6 +20,11 @@ class FormPeminjamanController extends Controller
         $data = FormPeminjaman::with('department')->with('aset')->get();
         return response()->json($data);
     }
+    public function history($id)
+    {
+        $data = FormPeminjaman::with('department')->with('aset')->where('id_department',$id)->get();
+        return response()->json($data);
+    }
     public function count()
     {
         $data;

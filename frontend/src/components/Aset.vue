@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar
-        color="red darken-4"
+        color="#a10115"
         elevation="4"
         dark
       >
@@ -25,7 +25,8 @@
           label="Pencarian"
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn class="ma-2" color="red darken-4" @click="ChangeURL('FormDataAset')" elevation="6" dark><v-icon>mdi-plus</v-icon></v-btn>
+        <v-btn class="ma-2" color="#f0efea" @click="ChangeURL('')" elevation="6" rounded><v-icon color="#a10115" >mdi-home-outline</v-icon></v-btn>
+        <v-btn class="ma-2" color="#f0efea" @click="ChangeURL('FormDataAset')" elevation="6" rounded><v-icon color="#a10115" >mdi-note-plus-outline</v-icon></v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-toolbar color="red darken-4" dark><span class="text-overline"><v-icon>mdi-alert</v-icon></span></v-toolbar>
@@ -42,25 +43,56 @@
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon
-      small
+      
         class="mr-2"
         @click="editItem(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
-      small
+      
         @click="DeleteDialog(item)"
       >
         mdi-delete
       </v-icon>
     </template>
-    <template v-slot:no-data>
-      <v-btn
-        color="primary"
+    <template v-slot:[`item.status_aset`]="{ item }">
+      <v-tooltip left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            class="ml-n3"
+            :color="item.status_aset == 'READY' ? 'red darken-4' : item.status_aset == 'DAILY' ? 'red darken-4' : 'grey'"
+            v-bind="attrs"
+            v-on="on"
+          >
+            mdi-car-back
+          </v-icon>
+        </template>
+        <span v-text="item.status_aset == 'READY' ? 'READY' : item.status_aset == 'DAILY' ? 'READY' : 'NOT READY'"></span>
+      </v-tooltip>
+    </template>
+    <template v-slot:[`item.kondisi_aset`]="{ item }">
+      <v-icon
+      class="ml-n3"
+      v-show="item.status_aset == 'DAILY'"
       >
-        Reset
-      </v-btn>
+        mdi-car-back
+      </v-icon>
+      <v-icon
+      class="mt-n1"
+      v-show="item.status_aset == 'DAILY'"
+      >
+        mdi-car-clock
+      </v-icon>
+      <v-icon
+      class="ml-n3"
+      v-show="item.status_aset == 'DIPINJAM'"
+      >
+        mdi-car-key
+      </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <span>Mohon Tunggu</span>
     </template>
   </v-data-table>
 </template>
@@ -71,7 +103,7 @@ import API from "@/services/http";
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
+        { text: 'Actions', value: 'actions', sortable: false , align: 'center',},
         {
           text: 'Jenis Aset',
           align: 'start',
@@ -80,8 +112,8 @@ import API from "@/services/http";
         { text: 'Nama Aset', value: 'nama_aset' },
         { text: 'Warna', value: 'warna' },
         { text: 'No Pol', value: 'no_plat' },
-        { text: 'Status Aset', value: 'status_aset' },
-        { text: 'Kondisi Aset', value: 'kondisi_aset' },
+        { text: 'Status Aset', value: 'status_aset' ,align: 'center',},
+        { text: 'Kondisi Aset', value: 'kondisi_aset',align: 'center', },
       ],
       desserts: [],
       DataAset:[],

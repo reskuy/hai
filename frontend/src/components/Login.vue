@@ -1,12 +1,14 @@
 <template>
-  <v-container fluid fill-height>
+  <v-container fluid fill-height :style="{backgroundColor:'#f0efea'}">
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
-                  <v-card class="elevation-12">
+                  <v-card class="elevation-12" color="#f0efea">
                     <v-app-bar
                     dark
-                    color="red darken-2"
+                    height="95"
+                    color="#a10115"
                     >
+                    <v-img class="mx-auto pa-3" max-width="60" src="../assets/logo-honda-1.png" style="cursor: pointer;"></v-img>
                     </v-app-bar>
                     <v-progress-linear
                         :active="loading"
@@ -17,18 +19,19 @@
                         color="red darken-4"
                     />
                      <v-card-text>
+                        <center class="mb-4 mt-3"><b>Selamat Datang di HONDA AMARTHA INVENTORY</b></center>
                            <v-text-field
                               prepend-icon="mdi-account"
                               name="login"
                               label="Username"
-                              color="red darken-4"
+                              color="#d72c16"
                               v-model="Username"
                               type="text"
                               @keyup.enter="login()"
                            ></v-text-field>
                            <v-text-field
                               id="password"
-                              color="red darken-4"
+                              color="#d72c16"
                               :append-icon="showpass ? 'mdi-eye' : 'mdi-eye-off'"
                               :type="showpass ? 'text' : 'password'"
                               prepend-icon="mdi-lock"
@@ -43,7 +46,7 @@
                         <v-btn
                         block
                         dark
-                        color="red darken-4"
+                        color="#a10115"
                         class="btn btn-primary rounded-lg text-capitalize mt-n6"
                         @click="login()"
                         >

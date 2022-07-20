@@ -6,11 +6,23 @@
       v-show="showappbar == true && this.device == 'Desktop'"
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-      <v-btn @click="ChangeURL('')" icon><v-icon color="red darken-4">mdi-home</v-icon></v-btn>
-      <v-toolbar-title><span class="toolbar-text text-h6">HONDA AMARTHA INVENTORY</span></v-toolbar-title>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" @click="ChangeURL('')" icon><v-img src="@/assets/logo-honda-1.png" max-width="43" class="ml-7 mr-6"></v-img></v-btn>
+        </template>
+        <span>Home</span>
+      </v-tooltip>
+      <!-- <v-btn @click="ChangeURL('')" icon><v-img src="@/assets/logo-honda-1.png" max-width="50" class="ml-7"></v-img></v-btn> -->
+      <v-toolbar-title class="ml-1"><span class="toolbar-text text-h6">HONDA AMARTHA INVENTORY</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
+      <v-btn text>
       <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
+      </v-btn>
+      <v-btn icon @click="drawer()">
+        <v-icon color="red darken-4">mdi-account-hard-hat</v-icon>
+      </v-btn>
+      <!-- <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
       <v-menu
       :rounded="true"
       offset-y
@@ -20,7 +32,7 @@
         v-bind="attrs"
         v-on="on"
         icon>
-            <v-icon color="red darken-4">mdi-account</v-icon>
+            <v-icon color="#a10115">mdi-account-hard-hat-outline</v-icon>
         </v-btn>
       </template>
 
@@ -35,7 +47,7 @@
           <v-list-item-title color="red darken-4" @click="ChangeURL(acc.to)" v-text="acc.text"/>
         </v-list-item>
       </v-list>
-    </v-menu>
+    </v-menu> -->
     </v-app-bar>
 </template>
 <script>
@@ -82,6 +94,9 @@ import Vue from 'vue'
         localStorage.removeItem('logged')
         localStorage.removeItem('departmentlogged')
         this.$router.push('/auth')
+      },
+      drawer(){
+        this.$Drawer()
       },
       ChangeURL(x){
         if(x == 'auth'){

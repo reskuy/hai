@@ -7,6 +7,7 @@
       ></v-progress-circular>
     </v-overlay>
     <v-main class="NoneTransition" :class="$vuetify.theme.dark ? 'black' : 'grey lighten-4'">
+      <NotifApp/>
       <Appbar/>
       <router-view/>
     </v-main>
@@ -19,11 +20,12 @@
   import firebase from '@/services/firebase-sw.js'
 
   Vue.use(Vuetify)
+  const NotifApp = () => import (/* webpackChunkName: "NotifApp"*/ '@/components/NotifApp.vue')
   const Appbar = () => import (/* webpackChunkName: "AppBar"*/ '@/components/Appbar.vue')
   console.log('self',self)
   export default {
     components: {
-      Appbar
+      Appbar,NotifApp
     },
 
     data () {
@@ -32,21 +34,13 @@
         overlay:false,
         notifToken:null,
         showappbar:false,
+        logged:JSON.parse(localStorage.getItem('logged')),
         tokenlist:[],
         Stored:null,
       }
     },
     created(){
       let db = firebase.database()
-      db.ref('alluser').on('value', x => {
-				const data = x.val();
-				let tokenlist = [];
-				Object.keys(data).forEach(key => {
-        // console.log(data[key])
-				tokenlist.push(data[key]);
-				});
-				this.tokenlist = tokenlist;
-			});
       try {
       firebase
         .messaging()
@@ -58,16 +52,17 @@
             .getToken()
             .then((token) => {
               window.console.log("token ", token);
-              this.setNotif(token)
+              this.notifToken = token
               db.ref("alluser").on('value', snapshot => {
-                const data = snapshot.val();
+                let data = snapshot.val();
                 let messages = [];
                 Object.keys(data).forEach(key => {
                 messages.push(data[key]);
                 });
-                this.tokenlist = messages
+                  if(messages.includes(token) == false){
+                    db.ref("alluser").push(token)
+                  }
               });
-              // msgref.
               this.receiveMessage();
             });
         })
@@ -75,7 +70,7 @@
           console.log("Unable to get token ", err);
         });
     } catch (e) {
-      console.log(e);
+      console.log('firebase',e);
     }
       // console.log(fbnotif.messaging())
     },
@@ -101,12 +96,15 @@
         this.device = "Desktop"
       }
       Vue.prototype.$loading = this.loading
+      Vue.prototype.$SetLog = this.SetLog
       Vue.prototype.$device = this.device
       Vue.prototype.$Toast = this.Toast
       Vue.prototype.$ChangeURL = this.ChangeURL
       Vue.prototype.$Store = this.Store
       Vue.prototype.$CekStore = this.CekStore
+      Vue.prototype.$DateConvert = this.dateconvert
       //
+      console.log(self)
     },
     methods:{
       loading(v){
@@ -118,16 +116,15 @@
       CekStore(){
         return this.Stored
       },
-      async setNotif(x){
-        let data = await this.tokenlist
-        console.log(data.includes(x))
-        if(data.includes(x) == false){
-          firebase.database().ref("alluser").push(x)
-        }
+      SetLog(){
+        return JSON.parse(localStorage.getItem('logged'))
       },
       receiveMessage() {
         firebase.messaging().onMessage((payload) => {
           console.log("payload ", payload);
+          var myAudio = new Audio('http://localhost:8000/storage/SuaraNotif.mpeg');
+          myAudio.play();
+          this.$Notifkan(payload.notification)
         });
     },
       Toast(icon,title){
@@ -152,6 +149,12 @@
           return this.$router.push('/'+x)
         }
       },
+      dateconvert(x){
+       let date = new Date(x)
+       let monthyear = date.toLocaleString('en-us',{month:'short', year:'numeric'})
+       let tgl = date.getDate()
+       return tgl+' '+monthyear
+      },
     },
     watch:{
       $route(){
@@ -169,10 +172,15 @@
 </script>
 
 <style>
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400&subset=latin,latin-ext);
+/* html::-webkit-scrollbar {
+  display:none
+} */
   .ScrollCSSHide::-webkit-scrollbar {
     display: none;
   }
+/* html {   max-height: 100% !important; }  */
   .toolbar-text{
-  color:#b71c1c;
+  color:#a10115;
   }
 </style>

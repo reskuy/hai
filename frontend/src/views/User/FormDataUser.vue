@@ -1,15 +1,14 @@
-<template>
-    <v-card>
-        <v-card-title>
-          <span class="text-h5">User Data</span>
-        </v-card-title>
+<template >
+<v-container fluid fill-height :style="{backgroundColor:'#c0b2b5'}">
+    <v-card class="mx-auto" elevation="3" width="600px">
+          <v-toolbar color="#a10115" dark class="mb-10 text-overline">User Data</v-toolbar>
+          <!-- <span class="text-h5">User Data</span> -->
         <v-card-text>
-          <v-container>
             <v-row>
               <v-col
                 cols="12"
-                sm="6"
-                md="4"
+                sm="12"
+                md="12"
               >
                 <v-text-field
                   label="Username*"
@@ -21,8 +20,8 @@
               </v-col>
               <v-col
                 cols="12"
-                sm="6"
-                md="4"
+                sm="12"
+                md="12"
               >
                 <v-text-field
                 color="red darken-4"
@@ -37,36 +36,36 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-container>
         </v-card-text>
         <v-card-actions>
           <v-btn
-            color="red darken-4"
+            color="black"
             dark
             elevation="6"
             @click="BackToUser"
           >
-            Kembali
+            <v-icon>mdi-arrow-left-circle</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            color="red darken-4"
+            color="#a10115"
             dark
             elevation="6"
             @click="Reset"
           >
-            Reset
+           <v-icon>mdi-close-circle</v-icon>
           </v-btn>
           <v-btn
-            color="red darken-4"
+            color="grey darken-2"
             dark
             elevation="6"
             @click="save()"
           >
-            Save
+             <v-icon>mdi-checkbox-marked-circle</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
+</v-container>
 </template>
 <script>
 import API from "@/services/http";

@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar
-        color="red darken-4"
+        color="#a10115"
         elevation="4"
         dark
       >
@@ -25,7 +25,7 @@
           label="Pencarian"
         ></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn class="ma-2" color="red darken-4" @click="ChangeURL('FormDataUser')" elevation="6" dark><v-icon>mdi-plus</v-icon></v-btn>
+        <v-btn class="ma-2" color="#f0efea" @click="ChangeURL('FormDataUser')" elevation="6" rounded><v-icon color="#a10115">mdi-account-multiple-plus</v-icon></v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-toolbar color="red darken-4" dark><span class="text-overline"><v-icon>mdi-alert</v-icon></span></v-toolbar>
@@ -56,11 +56,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-      >
-        Reset
-      </v-btn>
+      <span>Mohon Tunggu</span>
     </template>
   </v-data-table>
 </template>

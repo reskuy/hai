@@ -27,7 +27,26 @@ class FormTesDriveController extends Controller
         $data['approve'] = DB::table('form_tes_drive')->where('approve_form_tes_drive','!=',null)->count();
         return response()->json($data);
     }
-
+    public function approve($id,Request $request)
+    {
+        if($request->AccBy == 'HRGA'){
+            if($request->AccHR == 'N'){
+                FormTesDrive::where('id_form_tes_drive',$id)
+                ->update(['acc_hr'=>$request->AccHR,'approve_form_tes_drive'=>$request->Approve]);
+            }
+            $u = FormTesDrive::where('id_form_tes_drive',$id)
+            ->update(['acc_hr'=>$request->AccHR]);
+        }else{
+            // if($request->AccManager == 'Y'){
+            //     Aset::where('id_aset',$request->IdAset)
+            //     ->update(['status_aset'=>'DIPINJAM']);
+            // }
+            $u = FormTesDrive::where('id_form_tes_drive',$id)
+            ->update(['acc_manager'=>$request->AccManager,'approve_form_tes_drive'=>$request->Approve]);
+            
+        }
+        return $u;
+    }
     /**
      * Show the form for creating a new resource.
      *
