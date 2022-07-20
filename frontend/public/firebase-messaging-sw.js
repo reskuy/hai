@@ -23,7 +23,7 @@ importScripts("https://www.gstatic.com/firebasejs/8.2.5/firebase-messaging.js");
       const notificationTitle = payload.notification.title;
       const notificationOptions = {
         body: payload.notification.body,
+        icon: payload.notification.icon,
       };
-    
       self.registration.showNotification(notificationTitle, notificationOptions);
     });
