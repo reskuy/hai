@@ -1,4 +1,8 @@
 <template>
+<v-container
+fluid
+    style="height:100%"
+    :style="{backgroundColor:'#c8d2d8'}">
   <v-data-table
     :headers="headers"
     :items="DataUser"
@@ -7,10 +11,12 @@
     :custom-filter="filter"
   >
     <template v-slot:top>
+<!--desktop-->
       <v-toolbar
         color="#a10115"
         elevation="4"
         dark
+        v-show="device == 'Desktop'"
       >
         <v-toolbar-title>Data User</v-toolbar-title>
         <v-divider
@@ -18,14 +24,25 @@
           inset
           vertical
         ></v-divider>
+        <v-tooltip right color="white">
+          <template v-slot:activator="{ on, attrs }">
+          <v-icon 
+          large
+           v-bind="attrs"
+           v-on="on" 
+           class="account ma-2" 
+           color="white" 
+           @click="ChangeURL('FormDataUser')">mdi-account-multiple-plus</v-icon>
+           </template>
+           <span style="color: black;"><b>Input</b></span>
+           </v-tooltip>
+        <v-spacer></v-spacer>
         <v-text-field
           prepend-icon="mdi-magnify"
           class="mt-6"
           v-model="search"
           label="Pencarian"
         ></v-text-field>
-        <v-spacer></v-spacer>
-        <v-btn class="ma-2" color="#f0efea" @click="ChangeURL('FormDataUser')" elevation="6" rounded><v-icon color="#a10115">mdi-account-multiple-plus</v-icon></v-btn>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-toolbar color="red darken-4" dark><span class="text-overline"><v-icon>mdi-alert</v-icon></span></v-toolbar>
@@ -39,17 +56,37 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
+      <!--Mobile-->
+      <v-toolbar
+        color="#a10115"
+        elevation="4"
+        dark
+        v-show="device == 'Mobile'">
+          <v-toolbar-title class="pencarian" style="font-size:13px">Data User</v-toolbar-title>
+          
+          <v-spacer></v-spacer>
+          <v-icon class="mr-1" @click="ChangeURL('FormDataUser')">mdi-account-multiple-plus</v-icon>
+          <v-spacer></v-spacer>
+          <v-text-field
+          
+            prepend-icon="mdi-magnify"
+            class="pencarian mt-6"
+            v-model="search"
+            label="Pencarian"
+          ></v-text-field>
+        </v-toolbar>
+    </template>
+    <template v-slot:[`item.No`]="{ item }">
+      <v-chip class="m">{{item.No}}</v-chip>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-      small
+      <v-icon   
         class="mr-2"
         @click="editItem(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
-      small
         @click="DeleteDialog(item)"
       >
         mdi-delete
@@ -59,17 +96,23 @@
       <span>Mohon Tunggu</span>
     </template>
   </v-data-table>
+  </v-container>
 </template>
 <script>
 import API from "@/services/http";
   export default {
     data: () => ({
       dialog: false,
+      device: null,
       dialogDelete: false,
       headers: [
-        { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
+        { text: 'No User', value: 'No' },
+        { text: 'Nama Lengkap', value: 'nama_lengkap' },
+        { text: 'Department', value: 'department.nama_department' },
         { text: 'Username', value: 'username' },
-        { text: 'Password', value: 'password' },
+        { text: 'Password', value: 'Secret' },
+        { text: 'Level', value: 'level' },
+        { text: 'Actions', value: 'actions', sortable: false , align: 'start',},
       ],
       desserts: [],
       DataUser:[],
@@ -89,6 +132,11 @@ import API from "@/services/http";
 
     created () {
       this.$loading(true)
+      this.device = this.$device
+      console.log(this.$UserLogged())
+      if(this.$UserLogged().level !=  3){
+        return this.$ChangeURL('')
+      }
       this.getDataUser()
     },
 
@@ -139,6 +187,12 @@ import API from "@/services/http";
       }, 
       getDataUser(){
         API.get("/user").then(x=>{
+          let i= 1
+          x.data.forEach(z => {
+            z.No = i
+            z.Secret = '********'
+            i++
+          });
           this.DataUser = x.data
           this.$loading(false)
         })
@@ -146,3 +200,20 @@ import API from "@/services/http";
     },
   }
 </script>
+<style>
+.aset{
+  background-color: #a10115 !important;
+  margin-right: 2px;
+  border:2px solid #ffffff75 !important;
+}
+.pencarian{
+  width: 150px;
+}
+.account{
+  font-size:26px !important;
+
+}
+.judul{
+width:70px;
+}
+</style>

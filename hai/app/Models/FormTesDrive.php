@@ -19,4 +19,8 @@ class FormTesDrive extends Model
     {
         return $this->belongsTo(Aset::class,'id_aset','id_aset');
     }
+    public function pengembalian()
+    {
+        return $this->belongsTo(FormPengembalianTesDrive::class,'id_form_tes_drive','id_form_tes_drive');
+    }
 }

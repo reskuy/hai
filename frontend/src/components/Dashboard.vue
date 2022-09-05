@@ -78,10 +78,12 @@ import Vue from 'vue'
           {
           color: '#a10115',
           colorback: '#F5F5F5',
-          icon: 'mdi-account-hard-hat',
+          icon: 'mdi-account',
           title: 'User',
           data: 'USER',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           count:'-',
           to:'User'
         },
@@ -92,26 +94,32 @@ import Vue from 'vue'
           title: 'Aset',
           data: 'ASET',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           count:'-',
           to:'Aset'
         },
         {
           color: '#a10115',
           colorback: '#F5F5F5',
-          icon: 'mdi-car',
+          icon: 'mdi-notebook-plus',
           title: 'Tes Drive',
           data: '-',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           count:'-',
           to:'TesDrive'
         },
         {
           color: '#a10115',
           colorback: '#F5F5F5',
-          icon: 'mdi-notebook-plus',
+          icon: 'mdi-notebook-plus-outline',
           title: 'Peminjaman',
           data: '-',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           count:'-',
           to:'Peminjaman'
         },
@@ -123,6 +131,8 @@ import Vue from 'vue'
           data: 'Tes Drive',
           count:'-',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           to:'PengembalianTesDrive'
         },
         {
@@ -133,8 +143,22 @@ import Vue from 'vue'
           data: 'Peminjaman',
           count:'-',
           locked: 'N',
+          isLoad:true,
+          badge:false,
           to:'PengembalianPeminjaman'
         },
+        // {
+        //   color: '#a10115',
+        //   colorback: '#F5F5F5',
+        //   icon: 'mdi-chart-line',
+        //   title: 'Laporan',
+        //   data: '',
+        //   count:'-',
+        //   locked: 'N',
+        //   isLoad:true,
+        //   badge:false,
+        //   to:''
+        // },
       ],
     }),
     created(){
@@ -145,9 +169,6 @@ import Vue from 'vue'
         // console.log(this.device)
     },
     mounted(){
-      window.scrollTo(0,0)
-      let elHtml = document.getElementsByTagName('html')[0]
-      elHtml.style.overflowY = 'hidden'
       // console.log(this.$route.name)
       Vue.prototype.$showDialogBell = this.showDialog
     },

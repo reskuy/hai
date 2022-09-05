@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid :style="{backgroundColor:'#c0b2b5'}">
-    <v-card class="mx-auto ma-2 pa-2" elevation="3" width="1150px">
+  <v-container fluid :style="{backgroundColor:'#c8d2d8'}">
+    <v-card class="mx-auto ma-2 pa-2 mb-12" elevation="3" width="1150px">
       <!-- <v-toolbar width="270px" color="#a10115" dark class="mb-10 text-overline"><center><span>Form Pengajuan Peminjaman</span></center></v-toolbar> -->
       <v-sheet class="mb-7 pa-2 d-flex justify-start">
         <v-card class="pa-2 text-overline text-center" width="259px" dark color="#a10115"><span>Form Pengajuan Peminjaman</span></v-card>
@@ -40,6 +40,7 @@
       
       <v-col cols="4">
         <v-subheader>Keperluan</v-subheader>
+        <v-checkbox v-show="device == 'Mobile'" class="mt-n5 mx-3" value="DAILY" label="Daily" v-model="StatusAset" color="red darken-4"/>
       </v-col>
       <v-col cols="7">
         <v-text-field
@@ -48,8 +49,8 @@
         :disabled="KeperluanDisabled"
         v-model="Keperluan"/>
       </v-col>
-      <v-col cols="1">
-        <v-checkbox label="Daily" value="DAILY" v-model="StatusAset" color="red darken-4"/>
+      <v-col v-show="device == 'Desktop'" cols="1">
+        <v-checkbox value="DAILY" label="Daily" v-model="StatusAset" color="red darken-4"/>
       </v-col>
 
       <v-col cols="4">
@@ -62,7 +63,7 @@
         :item-text="NamaAset"
         :items="AsetData"
         v-model="ModelKendaraan"
-        label=" Pilih Tipe Kendaraan Dan Nomor Polisi"/>
+        label=" Pilih Tipe"/>
       </v-col>
 
       <v-col cols="4">
@@ -72,7 +73,7 @@
         <v-text-field
         color="#d72c16"
         v-model="NoPol"
-        label="Sesuai Tipe Kendaraan yang di Pilih"
+        label=""
         readonly/>
       </v-col>
 
@@ -83,7 +84,7 @@
         <v-text-field
         color="#d72c16"
           v-model="KondisiKilometer"
-          label="Isi Kilometer"
+          label=""
           value="0"
           suffix="KM"
         ></v-text-field>
@@ -96,7 +97,7 @@
         <v-text-field
         color="#d72c16"
           v-model="KondisiBBM"
-          label="Isi Bahan Bakar"
+          label=""
           value="0"
           suffix="Bar"
         ></v-text-field>
@@ -129,59 +130,204 @@
         label="Kondisi"
         v-model="KondisiFisik"/>
       </v-col>
+      <v-col cols="4">
+        <v-subheader>Jam Keluar</v-subheader>
+      </v-col>
+      <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Jam"
+        v-model="JamKeluarJam"/>
+      </v-col>
+        <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Menit"
+        v-model="JamKeluarMenit"/>
+      </v-col>
+      <v-col cols="5" v-show="device == 'Desktop'"></v-col>
+
+      <v-col cols="4">
+        <v-subheader>Jam Masuk</v-subheader>
+      </v-col>
+      <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Jam"
+        v-model="JamMasukJam"/>
+      </v-col>
+        <v-col cols="4" md="1">
+        <v-text-field
+        maxlength="2"
+        color="#d72c16"
+        label="Menit"
+        v-model="JamMasukMenit"/>
+      </v-col>
+      <v-col cols="5" v-show="device == 'Desktop'"></v-col>
+      <!-- <v-col cols="4">
+        <v-subheader>Jam Keluar</v-subheader>
+      </v-col>
+      <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Jam"
+        v-model="JamKeluarJam"/>
+      </v-col>
+        <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Menit"
+        v-model="JamKeluarMenit"/>
+      </v-col>
+      <v-col cols="5" v-show="device == 'Desktop'"></v-col>
+
+      <v-col cols="4">
+        <v-subheader>Jam Masuk</v-subheader>
+      </v-col>
+      <v-col cols="4" md="1">
+        <v-text-field
+        color="#d72c16"
+        maxlength="2"
+        label="Jam"
+        v-model="JamMasukJam"/>
+      </v-col>
+        <v-col cols="4" md="1">
+        <v-text-field
+        maxlength="2"
+        color="#d72c16"
+        label="Menit"
+        v-model="JamMasukMenit"/>
+      </v-col>
+      <v-col cols="5" v-show="device == 'Desktop'"></v-col> -->
 
       <v-col cols="4">
         <v-subheader>Tanggal Pemakaian</v-subheader>
       </v-col>
       <v-col cols="8">
-          <v-menu
-          color="#d72c16"
-          v-model="menu2"
-          :close-on-content-click="false"
-          transition="scale-transition"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-            color="#d72c16"
-              v-model="TanggalPeminjaman"
-              label="Tanggal Peminjaman"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-          color="#d72c16"
+        <v-dialog
+        color="red darken-4"
+        ref="dialogTanggalPeminjaman"
+        v-model="menu2"
+        :return-value.sync="TanggalPeminjaman"
+        persistent
+        width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            color="red darken-4"
             v-model="TanggalPeminjaman"
-            @input="menu2 = false"
-          ></v-date-picker>
-        </v-menu>
+            label="Tanggal Peminjaman"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          color="red darken-4"
+          v-model="TanggalPeminjaman"
+          scrollable
+        >
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="red darken-4"
+            @click="menu2 = false"
+          >
+            Batal
+          </v-btn>
+          <v-btn
+            text
+            color="red darken-4"
+            @click="$refs.dialogTanggalPeminjaman.save(TanggalPeminjaman)"
+          >
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-dialog>
       </v-col>
+
+      <v-col cols="4">
+        <v-subheader>Estimasi Tanggal Pengembalian</v-subheader>
+      </v-col>
+      <v-col cols="8">
+        <v-dialog
+        color="red darken-4"
+        ref="dialogEstimasiTanggalPengembalian"
+        v-model="menu3"
+        :return-value.sync="EstimasiTanggalPengembalian"
+        persistent
+        width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            color="red darken-4"
+            v-model="EstimasiTanggalPengembalian"
+            label="Estimasi Tanggal Pengembalian"
+            prepend-icon="mdi-calendar"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker
+          color="red darken-4"
+          v-model="EstimasiTanggalPengembalian"
+          scrollable
+        >
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="red darken-4"
+            @click="menu3 = false"
+          >
+            Batal
+          </v-btn>
+          <v-btn
+            text
+            color="red darken-4"
+            @click="$refs.dialogEstimasiTanggalPengembalian.save(EstimasiTanggalPengembalian)"
+          >
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-dialog>
+      </v-col>
+
     </v-row>
       <v-card-actions>
-        <v-btn color="#a10115" dark @click="Reset()">Reset
+        <v-tooltip right>
+          <template v-slot:activator="{ on, attrs }">
           <v-icon 
-          dark
-          right>
-            mdi-close-circle
-          </v-icon>
-        </v-btn>
+          large
+           v-bind="attrs"
+           v-on="on" 
+           class="ml-3" 
+           style="color: black;" 
+           @click="Reset()">mdi-close-circle-outline</v-icon>
+           </template>
+           <span>Reset</span>
+           </v-tooltip>
         <v-spacer/>
-        <v-btn
-          class="ma-2"
-          color="grey darken-2"
-          dark
-          @click="Save()"
-        >
-          Save
-          <v-icon
-            dark
-            right
-          >
-            mdi-checkbox-marked-circle
-          </v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <template v-slot:activator="{ on, attrs }">
+          <v-icon 
+          large
+           v-bind="attrs"
+           v-on="on" 
+           class="ml-3 ma-2" 
+           style="color: #a10115;" 
+           :disabled="SaveDisabled"
+           right
+           @click="Save()"> mdi-checkbox-marked-circle-outline</v-icon>
+           </template>
+           <span>Save</span>
+           </v-tooltip>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -192,15 +338,20 @@ import axios from "axios";
 import firebase from '@/services/firebase-sw.js'
   export default {
     data: () => ({
-      PenanggungJawab: localStorage.getItem("userlogged"),
-      Department: JSON.parse(localStorage.getItem("departmentlogged")),
+      PenanggungJawab: JSON.parse(localStorage.getItem("logged")).nama_lengkap,
+      Department: JSON.parse(localStorage.getItem("logged")).department,
       NamaCustomer:null,
       AsetData:[],
+      listoken:[],
       KeperluanDisabled:false,
-      email: '',
+      device: null,
       StatusAset:null,
       overlay:false,
       NoPol:null,
+      // JamMasukJam:null,
+      // JamMasukMenit:'00',
+      // JamKeluarJam:null,
+      // JamKeluarMenit:'00',
       select: null,
       Tujuan:null,
       Keperluan:null,
@@ -211,12 +362,17 @@ import firebase from '@/services/firebase-sw.js'
       KondisiAwalKebersihanEksterior:null,
       KondisiFisik:null,
       LokasiTesDrive:null,
+      EstimasiTanggalPengembalian:null,
       TanggalPeminjaman:(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       menu: false,
       modal: false,
       menu2: false,
+      menu3:false,
       checkbox: false,
     }),
+    created(){
+      this.device = this.$device
+    },
     mounted(){
       this.getAset()
     },
@@ -233,6 +389,8 @@ import firebase from '@/services/firebase-sw.js'
       },
       ModelKendaraan(x){
         this.NoPol= x != null ? this.AsetData.find(data=>data.id_aset==x).no_plat : null
+        this.KondisiBBM= x != null ? this.AsetData.find(data=>data.id_aset==x).BBM : null
+        this.KondisiKilometer= x != null ? this.AsetData.find(data=>data.id_aset==x).KM : null
       }
     },
     methods: {
@@ -262,13 +420,18 @@ import firebase from '@/services/firebase-sw.js'
               Keperluan:this.Keperluan,
               Tujuan:this.Tujuan,
               KondisiAwalBBM:this.KondisiBBM,
+              JamMasuk:this.JamMasukJam+':'+this.JamMasukMenit,
+              JamKeluar:this.JamKeluarJam+':'+this.JamKeluarMenit,
               KondisiAwalKilometer:this.KondisiKilometer,
-              KondisiAwalKebersihan:'Interior : '+this.KondisiAwalKebersihanInterior+' / Eksterior : '+this.KondisiAwalKebersihanEksterior,
+              KondisiAwalKebersihanInterior:this.KondisiAwalKebersihanInterior,
+              KondisiAwalKebersihanEksterior:this.KondisiAwalKebersihanEksterior,
               KondisiAwalFisikKendaraan:this.KondisiFisik,
               TglPeminjaman:this.TanggalPeminjaman,
               StatusAset:this.StatusAset,
+              EstimasiTanggalPengembalian: this.EstimasiTanggalPengembalian
             }).then(x=>{
               this.KirimNotif()
+              this.SetSeen()
               this.Reset()
               console.log(x)
               this.overlay = false
@@ -276,20 +439,25 @@ import firebase from '@/services/firebase-sw.js'
               this.$Toast('success','Pengajuan Dibuat')
             })
       },
+      SetSeen(){
+        api.get('setseen/peminjaman')
+      },
       ChangeURL(x){
         this.$ChangeURL(x)
       },
-      KirimNotif(){
+      async KirimNotif(){
         let kendaraan = this.AsetData.find(data=>data.id_aset==this.ModelKendaraan).nama_aset
-        let listoken = [];
-        firebase.database().ref("alluser").on('value', snapshot => {
+        const eventref = firebase.database().ref("userlevel/4"); // HRGA
+        let snapshot = await eventref.once('value');
+        // firebase.database().ref("alluser").on('value', snapshot => {
                 let dx = snapshot.val();
                 Object.keys(dx).forEach(key => {
-                listoken.push(dx[key]);
+                this.listoken.push(dx[key]);
                 });
-            })
+                this.listoken.concat(this.$TokenIT)
+            // })
         let data = {
-          "registration_ids":listoken, 
+          "registration_ids":this.listoken, 
             "notification" : {
                     "title": "Pengajuan Peminjaman",
                     "body": "pengajuan dari "+this.PenanggungJawab+" Peminjaman Kendaraan "+kendaraan+". Tujuan Ke "+this.Tujuan+". Untuk Keperluan "+this.Keperluan,
@@ -324,6 +492,7 @@ import firebase from '@/services/firebase-sw.js'
         this.KondisiAwalKebersihanEksterior = null
         this.KondisiFisik = null
         this.TanggalPeminjaman = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+        this.TanggalKembali = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
       },
     },
   }

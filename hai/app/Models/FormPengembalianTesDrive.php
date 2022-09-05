@@ -13,10 +13,15 @@ class FormPengembalianTesDrive extends Model
     public $timestamps = false;
     public function tesdrive()
     {
-        return $this->belongsTo(Department::class,'id_form_tes_drive','id_form_tes_drive');
+        return $this->belongsTo(FormTesDrive::class,'id_form_tes_drive','id_form_tes_drive');
     }
     public function aset()
     {
         return $this->belongsTo(Aset::class,'id_aset','id_aset');
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class,'id_department','id_department');
+    }
+    
 }

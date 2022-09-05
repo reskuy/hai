@@ -1,180 +1,205 @@
 <template>
-  <v-container fluid :style="{backgroundColor:'#c0b2b5'}">
-    <v-card class="mx-auto ma-2 pa-2" elevation="3" width="1150px">
+  <v-container fluid fill-height :style="{backgroundColor:'#c8d2d8'}">
+    <v-card class="mx-auto ma-2 pa-2" elevation="3" width="1400px">
       <v-sheet class="mb-7 pa-2 d-flex justify-start">
-        <v-card class="pa-2 text-overline text-center" width="259px" dark color="#a10115"><span>Form Pengajuan Tes Drive</span></v-card>
+        <v-card class="pa-2 text-overline text-center" width="185px" dark color="#a10115"><span><b>Pengajuan Tes Drive</b></span></v-card>
       </v-sheet>
     <v-row>
-        <v-col cols="4">
-        <v-subheader>Penanggung Jawab</v-subheader>
-      </v-col>
-      <v-col cols="8">
+      <v-col cols="6" md="3" sm="6" xs="6">
         <v-text-field
         color="#d72c16"
-        label="Nama"
+        prepend-icon="mdi-numeric-1-box-multiple-outline"
+        label="No Referensi"
+        v-model="NoRefrensi"
+        readonly/>
+      </v-col>
+
+      <v-col cols="6" md="3" sm="6" xs="6">
+        <v-text-field
+        color="#d72c16"
+        prepend-icon="mdi-account-hard-hat-outline"
+        label="Penanggung Jawab"
         v-model="PenanggungJawab"
         readonly/>
       </v-col>
 
-      <v-col cols="4">
-        <v-subheader>Department</v-subheader>
+      <v-col cols="6" md="3" sm="6" xs="6">
+        <v-text-field
+        persistent-hint
+        hint="*estimasi jam pemakaian akan berubah sesuai approve"
+        color="#d72c16"
+        prepend-icon="mdi-clock-time-four-outline"
+        label="Jam Keluar"
+        v-model="JamKeluar"
+        readonly/>
       </v-col>
-      <v-col cols="8">
+
+      <v-col cols="6" md="3" sm="6" xs="6">
+        <v-text-field
+        persistent-hint
+        hint="*estimasi jam akan berubah sesuai kembali kendaraan"
+        color="#d72c16"
+        prepend-icon="mdi-clock-time-four-outline"
+        label="Estimasi Jam Masuk"
+        v-model="JamMasuk"
+        readonly/>
+      </v-col>
+
+      <v-col cols="6" md="3" sm="6" xs="6">
+          
+      </v-col>
+
+      <v-col cols="6" md="3" sm="12">
         <v-text-field
         color="#d72c16"
+        prepend-icon="mdi-office-building-outline"
         label="Department"
-        v-model="Department.nama_department"
+        v-model="Department"
         readonly/>
       </v-col>
 
-      <v-col cols="4">
-        <v-subheader>Nama Customer</v-subheader>
-      </v-col>
-      <v-col cols="8">
+      <v-col cols="6" md="3" sm="6" xs="6">
         <v-text-field
         color="#d72c16"
-        label="Nama Sesuai STNK"
-        v-model="NamaCustomer"/>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Model Kendaraan</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-select
-        color="#d72c16"
-        :item-value="IdAset"
-        :item-text="NamaAset"
-        :items="AsetData"
-        v-model="ModelKendaraan"
-        label=" Pilih Tipe Kendaraan Dan Nomor Polisi"/>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Nomor Polisi</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-        color="#d72c16"
-        v-model="NoPol"
-        label="Sesuai Tipe Kendaraan yang di Pilih"
+        prepend-icon="mdi-calendar"
+        label="Tgl Tes Drive"
+        v-model="TanggalPeminjaman"
         readonly/>
       </v-col>
 
-      <v-col cols="4">
-        <v-subheader>Kondisi Awal Kilometer</v-subheader>
-      </v-col>
-      <v-col cols="8">
+      <v-col cols="6" md="3" sm="6" xs="6">
         <v-text-field
-          color="#d72c16"
-          v-model="KondisiKilometer"
-          label="Isi Kilometer"
-          value="0"
-          suffix="KM"
-        ></v-text-field>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Kondisi Awal BBM</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
+        persistent-hint
+        hint="*tanggal akan berubah jika terlambat mengembalikan kendaraan"
         color="#d72c16"
-          v-model="KondisiBBM"
-          label="Isi Bahan Bakar"
-          value="0"
-          suffix="Bar"
-        ></v-text-field>
+        prepend-icon="mdi-calendar"
+        label="Tgl Kembali Kendaraan"
+        v-model="TanggalKembali"
+        readonly/>
       </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Kondisi Awal Kebersihan</v-subheader>
-      </v-col>
-      <v-col cols="4">
-        <v-text-field
-        color="#d72c16"
-          v-model="KondisiAwalKebersihanInterior"
-          label="Interior"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="4">
-        <v-text-field
-        color="#d72c16"
-          v-model="KondisiAwalKebersihanEksterior"
-          label="Eksterior"
-        ></v-text-field>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Kondisi Awal Fisik Kendaraan</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-        color="#d72c16"
-        label="Kondisi"
-        v-model="KondisiFisik"/>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Lokasi Tes Drive</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-        color="#d72c16"
-        label="Sesuai Lokasi"
-        v-model="LokasiTesDrive"/>
-      </v-col>
-
-      <v-col cols="4">
-        <v-subheader>Tanggal Pemakaian</v-subheader>
-      </v-col>
-      <v-col cols="8">
-          <v-menu
-          color="#d72c16"
-          v-model="menu2"
-          :close-on-content-click="false"
-          transition="scale-transition"
+      
+<!--kolom data lengkap-->
+      <v-col cols="12" v-show="device == 'Desktop'">
+        <v-simple-table>
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-left">
+            Nama Customer
+          </th>
+          <th class="text-left">
+            Model Kendaraan
+          </th>
+          <th class="text-left">
+            Nomor Polisi
+          </th>
+          <th class="text-left">
+            Kilometer
+          </th>
+          <th class="text-left">
+            BBM
+          </th>
+          <th class="text-left">
+            Kebersihan Interior
+          </th>
+          <th class="text-left">
+            Kebersihan Eksterior
+          </th>
+          <th class="text-left">
+            Fisik Kendaraan
+          </th>
+          <th class="text-left">
+            Lokasi Tes Drive
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-            color="#d72c16"
-              v-model="TanggalPemakaian"
-              label="Tanggal Pemakaian"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-          color="#d72c16"
-            v-model="TanggalPemakaian"
-            @input="menu2 = false"
-          ></v-date-picker>
-        </v-menu>
+          <td>{{NamaCustomer}}</td>
+          <td>{{ModelKendaraan}}</td>
+          <td>{{NoPol}}</td>
+          <td>{{KondisiKilometer}}</td>
+          <td>{{KondisiBBM}}</td>
+          <td>{{KondisiAwalKebersihanInterior}}</td>
+          <td>{{KondisiAwalKebersihanEksterior}}</td>
+          <td>{{KondisiFisik}}</td>
+          <td>{{LokasiTesDrive}}</td>
+        </tr>
+      </tbody>
+    </template>
+  </v-simple-table>
+      </v-col>
+
+      <!-- ini mobile -->
+      <v-col cols="12" v-show="device == 'Mobile'">
+       <v-simple-table  class="mt-n6">
+        <template v-slot:default>
+          <tbody>
+           <tr >
+            <th>Nama Customer</th>
+            <td>{{NamaCustomer}}</td>
+          </tr>
+          <tr>
+            <th>Model Kendaraan</th>
+            <td>{{ModelKendaraan}}</td>
+          </tr>
+          <tr>
+            <th>Nomor Polisi</th>
+            <td>{{NoPol}}</td>
+          </tr>
+          <tr>
+            <th>Kondisi Awal Kilometer</th>
+            <td>{{KondisiKilometer}}</td>
+          </tr>
+          <tr>
+            <th>Kondisi Awal BBM</th>
+            <td>{{KondisiBBM}}</td>
+          </tr>
+          <tr>
+            <th>Kondisi Awal Kebersihan</th>
+            <td>{{KondisiAwalKebersihan}}</td>
+          </tr>
+          <tr>
+            <th>Kondisi Awal Fisik Kendaraan</th>
+            <td>{{KondisiFisik}}</td>
+          </tr>
+          <tr>
+            <th>Lokasi Tes drive</th>
+            <td>{{LokasiTesDrive}}</td>
+          </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+        <!-- <table style="width:100%">
+         
+        </table> -->
       </v-col>
     </v-row>
       <v-card-actions>
-        <v-btn color="#a10115" dark @click="Reset()">Reset
-          <v-icon dark>
-            mdi-close-circle
-          </v-icon>
-        </v-btn>
         <v-spacer/>
+        <v-tooltip left>
+        <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ma-2"
-          color="grey darken-2"
+          v-on="on"
+          v-bind="attrs"
+          color="#a10115"
           dark
-          @click="Save()"
+          icon
         >
-          Save
           <v-icon
+          large
             dark
             right
+            @click="ChangeURL('tesdrive')"
           >
-            mdi-checkbox-marked-circle
+          mdi-close-circle-outline
           </v-icon>
         </v-btn>
+        </template>
+         <span>Close</span>
+        </v-tooltip>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -182,19 +207,24 @@
 <script>
 import axios from 'axios'
 import firebase from "@/services/firebase-sw"
-import api from "@/services/http"
+import API from "@/services/http";
   export default {
     data: () => ({
-      PenanggungJawab: localStorage.getItem("userlogged"),
-      Department: JSON.parse(localStorage.getItem("departmentlogged")),
+      PenanggungJawab: null,
+      Department: null,
       NamaCustomer:null,
       AsetData:[],
-      email: '',
+      device:null,
       overlay:false,
       NoPol:null,
-      select: null,
+      TanggalPeminjaman:null,
+      TanggalKembali:null,
+      NoRefrensi:null,
       ModelKendaraan:null,
+      JamKeluar:null,
+      JamMasuk:null,
       KondisiKilometer:null,
+      KondisiAwalKebersihan:null,
       KondisiBBM:null,
       KondisiAwalKebersihanInterior:null,
       KondisiAwalKebersihanEksterior:null,
@@ -207,18 +237,23 @@ import api from "@/services/http"
       checkbox: false,
     }),
     created(){
-      this.$loading(true)
+     this.$loading(true)
+      let data = this.$CekStore() == null ? [] : this.LocalData() // ini data yang dibawa dari table di cek disini
+      if(typeof data == 'object'){ this.GetData(this.$route.params.id) }else{ this.LocalData() }
+      // console.log(data)
+      
       this.getAset()
     },
-
+    mounted(){
+      this.device = this.$device
+    },
+    
     watch: {
-      ModelKendaraan(x){
-        this.NoPol= x != null ? this.AsetData.find(data=>data.id_aset==x).no_plat : null
-      }
+      //
     },
     methods: {
       getAset(){
-        api.get('/aset').then(x=>{
+        API.get('/aset').then(x=>{
           this.AsetData = x.data
           this.$loading(false)
         })
@@ -235,7 +270,7 @@ import api from "@/services/http"
         && this.LokasiTesDrive != null
         && this.TanggalPemakaian != null){
           this.overlay = true
-            api.post('/formtesdrive',{
+            API.post('/formtesdrive',{
               IdAset:this.ModelKendaraan,
               IdDepartment:this.Department.id_department,
               PenanggungJawab:this.PenanggungJawab,
@@ -246,6 +281,7 @@ import api from "@/services/http"
               KondisiFisik:this.KondisiFisik,
               LokasiTesDrive:this.LokasiTesDrive,
               TanggalPemakaian:this.TanggalPemakaian,
+              TanggalKembali:this.TanggalKembali,
             }).then(x=>{
               this.KirimNotif()
               this.Reset()
@@ -261,6 +297,51 @@ import api from "@/services/http"
       ChangeURL(x){
         this.$ChangeURL(x)
       },
+      GetData(x){
+      API.get('formtesdrive/'+x).then(x=>{
+        let data = x.data
+        console.log(data)
+        this.PenanggungJawab = data.penanggung_jawab
+        this.NamaCustomer = data.nama_customer
+        this.NoRefrensi = data.id_form_tes_drive
+        this.ModelKendaraan = data.aset.nama_aset
+        this.JamKeluar = data.jam_keluar_kendaraan
+        this.JamMasuk = data.estimasi_jam_masuk_kendaraan
+        this.NoPol = data.aset.no_plat
+        this.TanggalPeminjaman = data.tanggal_pemakaian
+        this.TanggalKembali = data.tanggal_kembali
+        this.KondisiBBM = data.kondisi_awal_bbm
+        this.Department = data.department.nama_department
+        this.KondisiKilometer = data.kondisi_awal_kilometer
+        this.KondisiFisik = data.kondisi_awal_fisik_kendaraan
+        this.KondisiAwalKebersihanInterior = data.kondisi_awal_kebersihan_interior
+        this.KondisiAwalKebersihanEksterior = data.kondisi_awal_kebersihan_eksterior
+        this.LokasiTesDrive = data.lokasi_tes_drive
+        this.TanggalSurat = this.$DateConvert(data.tanggal_pemakaian)
+        this.$loading(false)
+      })
+     },
+
+      LocalData(){
+      let data = this.$CekStore()
+        this.PenanggungJawab = data.penanggung_jawab
+        this.NamaCustomer = data.nama_customer
+        this.NoRefrensi = data.id_form_tes_drive
+        this.ModelKendaraan = data.aset.nama_aset
+        this.NoPol = data.aset.no_plat
+        this.JamKeluar = data.jam_keluar_kendaraan
+        this.JamMasuk = data.estimasi_jam_masuk_kendaraan
+        this.TanggalPeminjaman = data.tanggal_pemakaian
+        this.TanggalKembali = data.tanggal_kembali
+        this.KondisiBBM = data.kondisi_awal_bbm
+        this.Department = data.department.nama_department
+        this.KondisiKilometer = data.kondisi_awal_kilometer
+        this.KondisiFisik = data.kondisi_awal_fisik_kendaraan
+        this.KondisiAwalKebersihanInterior = data.kondisi_awal_kebersihan_interior
+        this.KondisiAwalKebersihanEksterior = data.kondisi_awal_kebersihan_eksterior
+        this.LokasiTesDrive = data.lokasi_tes_drive
+        this.$loading(false)
+     },
       KirimNotif(){
         let kendaraan = this.AsetData.find(data=>data.id_aset==this.ModelKendaraan).nama_aset
         let listoken = [];
@@ -306,6 +387,7 @@ import api from "@/services/http"
         this.TanggalPemakaian = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
         this.LokasiTesDrive = null
       },
+      
     },
   }
 </script>

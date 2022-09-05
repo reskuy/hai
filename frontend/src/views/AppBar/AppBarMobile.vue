@@ -15,7 +15,7 @@
       <v-toolbar-title class="mx-n4"><span class="toolbar-text text-h6">HAI</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
-       <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
+       <span class="toolbar-text" v-show="userlogged" v-text="userlogged != null ? 'Hi '+userlogged.nama_lengkap : null"></span>
       <v-menu
       :rounded="true"
       offset-y
@@ -25,11 +25,11 @@
         v-bind="attrs"
         v-on="on"
         icon>
-            <v-icon color="red darken-4">mdi-account-hard-hat</v-icon>
+            <v-icon color="red darken-4">mdi-account</v-icon>
         </v-btn>
       </template>
 
-      <v-list>
+      <!-- <v-list>
         <v-list-item
           v-for="acc in accitem"
           :key="acc.text"
@@ -38,7 +38,7 @@
         >
           <v-list-item-title @click="ChangeURL(acc.to)" v-text="acc.text"></v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-menu>
     </v-app-bar>
 </template>
@@ -49,10 +49,10 @@ import Vue from 'vue'
     dialog:true,
     device:null,
     isMobile:false,
-    department:localStorage.getItem('departmentlogged'),
+    department:null,
     UserPengguna:null,
     showappbar:false,
-    userlogged:localStorage.getItem('userlogged'),
+    userlogged:localStorage.getItem('logged'),
     accitem: [
         {
             to:'auth',
@@ -69,26 +69,20 @@ import Vue from 'vue'
         if(this.device == 'Mobile'){
           this.isMobile = true
         }
-        let userlogged = localStorage.getItem('userlogged')
-        let department=localStorage.getItem('departmentlogged')
-        if(userlogged){
-            this.dialog = false
-            this.department=department
-            this.showappbar = true
-        }
+        this.setLogged()
         Vue.prototype.$setLoggedMobile = this.setLogged
     },
     methods:{
       setLogged(){
-        this.userlogged = localStorage.getItem('userlogged')
-        this.department = localStorage.getItem('departmentlogged')
+        this.userlogged = JSON.parse(localStorage.getItem('logged'))
+        if(this.userlogged != null){
+          this.department = this.userlogged.department
+          this.showappbar = true
+        }
       },
       LogOut(){
         this.showappbar = false
-        this.$loggedout()
-        localStorage.removeItem('userlogged')
         localStorage.removeItem('logged')
-        localStorage.removeItem('departmentlogged')
         this.$router.push('/auth')
       },
       ChangeURL(x){

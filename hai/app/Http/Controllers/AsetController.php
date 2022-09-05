@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Aset;
+use App\Models\User;
+use App\Models\Seen;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,8 +22,11 @@ class AsetController extends Controller
         return Aset::all();
     }
 
-    public function count(){
-        return DB::table('aset')->count();
+    public function count($id){
+       $data = [];
+       $data['count'] = DB::table('aset')->count();
+       $data['seen'] = Seen::where('id_user',$id)->first('aset')->aset;
+       return $data; 
     }
     /**
      * Show the form for creating a new resource.
@@ -44,10 +50,15 @@ class AsetController extends Controller
         $u->jenis_aset = $request->JenisAset;
         $u->nama_aset = $request->NamaAset;
         $u->warna = $request->Warna;
+        $u->BBM = $request->BBM;
+        $u->KM = $request->KM;
         $u->no_plat = $request->NoPlat;
         $u->status_aset= $request->StatusAset;
         $u->kondisi_aset= $request->KondisiAset;
         $u->save();
+        $user = new UserController;
+        $user->log($request->User['nama_lengkap'].' Menambah '.$request->JenisAset.' '.$request->NamaAset.' '.$request->NoPlat.' Ke Data Aset');
+        // UserController::log($request->User['nama_lengkap'].' Menambah '.$request->JenisAset.' '.$request->NamaAset.' '.$request->NoPlat.' Ke Data Aset');
     }
 
     /**
@@ -86,9 +97,13 @@ class AsetController extends Controller
                 'jenis_aset'=>$request->JenisAset,
                 'nama_aset'=>$request->NamaAset,
                 'warna'=>$request->Warna,
+                'KM'=>$request->KM,
+                'BBM'=>$request->BBM,
                 'no_plat'=>$request->NoPlat,
                 'kondisi_aset'=>$request->KondisiAset,
                 'status_aset'=>$request->StatusAset]);
+                $user = new UserController;
+                $user->log($request->User['nama_lengkap'].' Mengubah Data Aset '.$request->JenisAset.' '.$request->NamaAset.' '.$request->NoPlat);
         return $u;
     }
 

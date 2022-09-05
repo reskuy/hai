@@ -18,11 +18,11 @@
             </v-list-item-icon>
             <v-list-item-title><span style="color:#a10115;">History</span></v-list-item-title>
           </v-list-item>
-          <v-list-item link @click="ChangeURL('Pengaturan')">
+          <v-list-item link @click="ChangeURL('Log')">
             <v-list-item-icon>
-              <v-icon color="#a10115">mdi-cog</v-icon>
+              <v-icon color="#a10115">mdi-account-clock</v-icon>
             </v-list-item-icon>
-            <v-list-item-title><span style="color:#a10115;">Pengaturan</span></v-list-item-title>
+            <v-list-item-title><span style="color:#a10115;">LOG</span></v-list-item-title>
           </v-list-item>
           <v-list-item link @click="ChangeURL('auth')">
             <v-list-item-icon>
@@ -53,12 +53,9 @@ import Vue from 'vue'
         return this.drawer = !this.drawer
       },
       LogOut(){
-        this.showappbar = false
-        this.$loggedout()
-        localStorage.removeItem('userlogged')
-        localStorage.removeItem('logged')
-        localStorage.removeItem('departmentlogged')
-        this.$router.push('/auth')
+        this.$setLogOut()
+        // localStorage.removeItem('logged')
+        // this.$router.push('/auth')
       },
       ChangeURL(x){
         if(x == 'auth'){

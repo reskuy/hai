@@ -17,37 +17,11 @@
 
       <v-spacer></v-spacer>
       <v-btn text>
-      <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
+      <span class="toolbar-text" v-show="userlogged" v-text="userlogged != null ? 'Hi '+userlogged.nama_lengkap : null"></span>
       </v-btn>
       <v-btn icon @click="drawer()">
-        <v-icon color="red darken-4">mdi-account-hard-hat</v-icon>
+        <v-icon color="red darken-4">mdi-account</v-icon>
       </v-btn>
-      <!-- <span class="toolbar-text" v-show="userlogged" v-text="'Hi '+userlogged"></span>
-      <v-menu
-      :rounded="true"
-      offset-y
-    >
-      <template v-slot:activator="{ attrs, on }">
-        <v-btn 
-        v-bind="attrs"
-        v-on="on"
-        icon>
-            <v-icon color="#a10115">mdi-account-hard-hat-outline</v-icon>
-        </v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item
-          v-for="acc in accitem"
-          :key="acc.text"
-          :to="acc.to"
-          link
-          color="red darken-4"
-        >
-          <v-list-item-title color="red darken-4" @click="ChangeURL(acc.to)" v-text="acc.text"/>
-        </v-list-item>
-      </v-list>
-    </v-menu> -->
     </v-app-bar>
 </template>
 <script>
@@ -56,10 +30,10 @@ import Vue from 'vue'
     data: () => ({
     dialog:true,
     device:null,
-    department:localStorage.getItem('departmentlogged'),
+    department:null,
     UserPengguna:null,
     showappbar:false,
-    userlogged:localStorage.getItem('userlogged'),
+    userlogged:localStorage.getItem('logged'),
     accitem: [
         {
             to:'auth',
@@ -72,27 +46,22 @@ import Vue from 'vue'
       ],
     }),
     mounted(){
-      this.device = this.$device
-        let userlogged = localStorage.getItem('userlogged')
-        let department=localStorage.getItem('departmentlogged')
-        if(userlogged){
-            this.dialog = false
-            this.department=department
-            this.showappbar = true
-        }
+        this.device = this.$device
+        this.setLogged()
         Vue.prototype.$setLogged = this.setLogged
+        Vue.prototype.$setLogOut = this.LogOut
     },
     methods:{
       setLogged(){
-        this.userlogged = localStorage.getItem('userlogged')
-        this.department = localStorage.getItem('departmentlogged')
+        this.userlogged = JSON.parse(localStorage.getItem('logged'))
+        if(this.userlogged != null){
+          this.department = this.userlogged.department
+          this.showappbar = true
+        }
       },
       LogOut(){
         this.showappbar = false
-        this.$loggedout()
-        localStorage.removeItem('userlogged')
         localStorage.removeItem('logged')
-        localStorage.removeItem('departmentlogged')
         this.$router.push('/auth')
       },
       drawer(){

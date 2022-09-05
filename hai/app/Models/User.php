@@ -11,8 +11,8 @@ class User extends Model
     protected $guarded = [];
     protected $table = 'user';
     public $timestamps = false;
-    // public function perusahaan()
-    // {
-    //     return $this->belongsTo(Perusahaan::class,'KodePerusahaan','KodePerusahaan');
-    // }
+    public function department()
+    {
+        return $this->belongsTo(Department::class,'id_department','id_department');
+    }
 }

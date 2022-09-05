@@ -13,10 +13,6 @@ class FormPengembalianPeminjaman extends Model
     public $timestamps = false;
     public function peminjaman()
     {
-        return $this->belongsTo(Department::class,'id_form_peminjaman','id_form_peminjaman');
-    }
-    public function aset()
-    {
-        return $this->belongsTo(Aset::class,'id_aset','id_aset');
+        return $this->belongsTo(FormPeminjaman::class,'id_form_peminjaman','id_form_peminjaman');
     }
 }

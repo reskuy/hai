@@ -1,8 +1,7 @@
 <template>
 <div
     class="mx-auto"
-    style="height:100vh"
-    :style="{backgroundColor:'#c8d2d8'}"
+    :style="{backgroundColor:'#c8d2d8',height:height}"
   > 
     <v-dialog
       v-model="dialog"
@@ -68,14 +67,11 @@
     <!-- #b4b19a -->
     </v-dialog>
      <v-sheet
-      height="175"
+      height="135"
       class="mb-n15"
       color="white">
         <v-container>
-          <v-row class="mt-n4 mb-n9">
-            <v-col col="6"><v-btn color="#a10115" icon rounded><v-icon color="#a10115" style="cursor: pointer;" @click="ShowBell(true)">mdi-bell-badge</v-icon></v-btn></v-col>
-            <v-col style="color:black" col="6" class="text-end text-overline">{{time}}</v-col>
-          </v-row>
+          
           <v-row>
             <v-col cols="15" class="text-center mt-2" color="#a10115"><h4>HONDA AMARTHA INVENTORY</h4>
             <h5>HR & GA Department</h5>
@@ -86,17 +82,13 @@
           <!-- <v-img class="mx-auto" max-width="120" src="@/assets/logo-honda.png" style="cursor: pointer;"></v-img> -->
         </v-container>
       </v-sheet>
-      <!-- <v-alert class="text-end overline" dense
-            color="black"
-            border="bottom"
-            colored-border
-            elevation="5">{{time+' '+realtime}}</v-alert> -->
+
             <!-- sementara hilang time di mobile -->
     <v-container>
       <v-row dense class="mt-1">
         <v-col cols="6">
           <v-alert
-          @click="ChangeURL('FormTesDrive')"
+          @click="ChangeURL({to:'FormTesDrive'})"
             dense
             color="black"
             border="bottom"
@@ -118,7 +110,7 @@
             color="black"
             border="bottom"
             colored-border
-            @click="ChangeURL('FormPeminjaman')"
+            @click="ChangeURL({to:'FormPeminjaman'})"
             elevation="5">
             <v-card-title>
               <span id="teks-merah" class="mx-n4">
@@ -129,18 +121,6 @@
              <!-- <span id="teks-merah" class="text-overline text-center">Buat Form</span> -->
           </v-alert>
         </v-col>
-        <!-- <v-col cols="12">
-        <v-alert
-            dense
-            color="black"
-            border="bottom"
-            colored-border
-            elevation="5">
-            <v-row dense>
-              <v-col class="text-start" cols="6"><v-icon color="#a10115" style="cursor: pointer;" @click="ShowBell(true)">mdi-bell-badge</v-icon></v-col>
-            </v-row>
-              </v-alert>
-              </v-col> -->
 
 <!-- icon icon dashboard -->
         <v-col
@@ -148,14 +128,38 @@
           :key="i"
           cols="3"
         >
-        <div class="text-center">
+        <div class="text-center" v-show="item.locked == 'N'">
           <v-avatar
             rounded-xl
             size="60"
             :color="item.colorback"
-            @click="ChangeURL(item.to)"
+            @click="ChangeURL(item)"
+          >
+          <v-badge
+            dot
+            v-show="item.badge == true"
+            color="green"
           >
             <v-icon :color="item.color"> 
+              {{item.icon}}
+            </v-icon>
+            </v-badge>
+            <v-icon :color="item.color" v-show="item.badge == false"> 
+              {{item.icon}}
+            </v-icon>
+          </v-avatar>
+
+          <p class="font mt-1">{{item.title}}</p>
+          <p v-show="item.title == 'Pengembalian'" class="font mt-n5">{{item.data}}</p>
+        </div>
+
+        <div class="text-center" v-show="item.locked == 'Y'">
+          <v-avatar
+            rounded-xl
+            size="60"
+            color="white"
+          >
+            <v-icon color="gray"> 
               {{item.icon}}
             </v-icon>
           </v-avatar>
@@ -163,16 +167,29 @@
           <p v-show="item.title == 'Pengembalian'" class="font mt-n5">{{item.data}}</p>
         </div>
         </v-col>
+
+        <v-col cols="12" class="mb-0">
+          <SyaratKetentuanMobile/>
+        </v-col>
       </v-row>
+      <Laporan />
+      <FloatChat />
     </v-container>
 </div>
 </template>
 <script>
+import SyaratKetentuanMobile from '@/components/SyaratKetentuanMobile/index.vue'
+import FloatChat from '@/components/FloatChat/index.vue'
+import Laporan from '@/components/DialogLaporan/index.vue'
 import API from "@/services/http";
   export default {
+    components:{
+      SyaratKetentuanMobile,FloatChat,Laporan
+    },
     data: () => ({
-    dialog:true,
+    dialog:false,
     logged:[],
+    height:'600px',
     value:true,
     realtime:null,
     time:null,
@@ -194,17 +211,19 @@ import API from "@/services/http";
       items: [],
     }),
     created(){
-      this.$loading(true)
+      let winheight = window.innerHeight+75
+      this.height = winheight+'px'
+      window.scrollTo(0,0)
       this.logged = JSON.parse(localStorage.getItem('logged'))
       this.items = this.$ItemDashboard
-      this.getTime()
-      this.startTime()
+      this.getDataUser()
       this.getDataAset()
-      this.getDataPeminjaman()
       this.getDataTesDrive()
+      this.getDataPeminjaman()
       this.getDataPengembalianTesDrive()
       this.getDataPengembalianPeminjaman()
-      this.getDataUser()
+      this.getTime()
+      this.startTime()
       this.getDepartment()
     },
     mounted(){
@@ -212,7 +231,10 @@ import API from "@/services/http";
         let department=localStorage.getItem('departmentlogged')
         if(userlogged){
             this.dialog = false
-            this.$showDialogBell(true)
+            if(localStorage.getItem('bell') == undefined){
+              this.$showDialogBell(true)
+            }
+            localStorage.setItem('bell','ok')
             this.Department = department
         }
     },
@@ -222,10 +244,11 @@ import API from "@/services/http";
         this.time = this.$DateConvert(hari)
       },
       getDataUser(){
+        let u = this.logged
+        console.log(u)
         API.get("totaluser").then(x=>{
-          let u = this.logged
           let index = this.items.findIndex(x=>x.title == 'User')
-          this.items[index].locked = (u.username == 'IT' ? 'N' : 'Y')
+          this.items[index].locked = u.level == 3 ? 'N' : 'Y'
           this.items[index].count = x.data
         })
       },
@@ -248,20 +271,20 @@ import API from "@/services/http";
         })
       },
       getDataPengembalianTesDrive(){
+        let u = this.logged
         API.get("totalpengembaliantesdrive").then(x=>{
-          let u = this.logged
           let index = this.items.findIndex(x=>x.data == 'Tes Drive')
-          this.items[index].locked = (u.username == 'Karyawan' ? 'Y' : u.username == 'Sales' ? 'Y' : 'N')
+          this.items[index].locked = u.level > 1 ? 'N' : 'Y'
           this.items[index].count = x.data.totalform
         })
       },
       getDataPengembalianPeminjaman(){
+        let u = this.logged
         API.get("totalpengembalianpeminjaman").then(x=>{
-          let u = this.logged
           let index = this.items.findIndex(x=>x.data == 'Peminjaman')
-          this.items[index].locked = (u.username == 'Karyawan' ? 'Y' : u.username == 'Sales' ? 'Y' : 'N')
-          this.$loading(false)
+          this.items[index].locked = u.level > 1 ? 'N' : 'Y'
           this.items[index].count = x.data.totalform
+          this.$loading(false)
         })
       },
       getDepartment(){
@@ -279,8 +302,11 @@ import API from "@/services/http";
         this.$router.go('/auth')
       },
       ChangeURL(x){
-        this.$ChangeURL(x)
-      },  
+        if(x.title == 'Laporan'){
+          this.$AllLaporan()
+        }
+        this.$ChangeURL(x.to)
+      },
       
         SavePengguna(){
           if(this.UserPengguna != null && this.Department != null){
@@ -321,5 +347,19 @@ import API from "@/services/http";
  font-family: 'Calibri';
  font-size: 11px;
  font-weight: bold;
+}
+.v-carousel__controls{
+  display:none !important;
+}
+.v-list .v-list-item--active{
+  color:#a10115;
+}
+.fab{
+  bottom:80px;
+  margin-left:290px;
+  position: fixed;
+  -webkit-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+  z-index: 4;
 }
 </style>

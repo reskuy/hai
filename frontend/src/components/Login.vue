@@ -1,14 +1,16 @@
 <template>
-  <v-container fluid fill-height :style="{backgroundColor:'#f0efea'}">
+  <v-container fluid fill-height :style="{backgroundColor:'#dfdfdf'}">
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
-                  <v-card class="elevation-12" color="#f0efea">
+                  <v-card class="elevation-12" color="#f0efea" width="450">
                     <v-app-bar
                     dark
                     height="95"
-                    color="#a10115"
+                    color="#585354"
                     >
-                    <v-img class="mx-auto pa-3" max-width="60" src="../assets/logo-honda-1.png" style="cursor: pointer;"></v-img>
+                    <v-img class=" mx-n1 pa-3 mt-n9" max-width="35" src="../assets/logo-honda-1.png" style="cursor: pointer;"></v-img>
+                    <span class="judul mt-n8 ml-2"><b >HONDA AMARTHA INVENTORY</b></span>
+                    <span class="welcome">LOGIN</span>
                     </v-app-bar>
                     <v-progress-linear
                         :active="loading"
@@ -19,7 +21,7 @@
                         color="red darken-4"
                     />
                      <v-card-text>
-                        <center class="mb-4 mt-3"><b>Selamat Datang di HONDA AMARTHA INVENTORY</b></center>
+                        
                            <v-text-field
                               prepend-icon="mdi-account"
                               name="login"
@@ -40,6 +42,8 @@
                               label="Password"
                               @click:append="showpass = !showpass"
                               @keyup.enter="login()"
+                              persistent-hint
+                              hint="*pastikan username dan password sesuai"
                            ></v-text-field>
                      </v-card-text>
                      <v-col>
@@ -47,7 +51,7 @@
                         block
                         dark
                         color="#a10115"
-                        class="btn btn-primary rounded-lg text-capitalize mt-n6"
+                        class="btn btn-primary rounded-lg text-capitalize mt-1"
                         @click="login()"
                         >
                         Masuk
@@ -68,7 +72,8 @@ export default {
             loading:false,
             Username:null,
             showpass:false,
-            Password:null
+            Password:null,
+            device:null,
         }
     },
     beforeCreate(){
@@ -78,6 +83,8 @@ export default {
       }
     },
     mounted(){
+        window.scrollTo(0,0)
+        this.device = this.$device
         // console.log('log')
     },
     methods:{
@@ -97,6 +104,12 @@ export default {
                 return
              }
              localStorage.setItem('logged',JSON.stringify(x.data))
+             if(this.device == 'Mobile'){
+                this.$setLoggedMobile()
+             }else{
+                this.$setLogged()
+             }
+             this.$ConnectFirebase()
              this.$Toast('success','Welcome')
              this.loading = false
              this.$loading(false)
@@ -111,5 +124,10 @@ export default {
 </script>
 
 <style>
-
+.judul{
+   font-size: smaller;
+}
+.welcome{
+   font-size: smaller;
+}
 </style>

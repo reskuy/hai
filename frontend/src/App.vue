@@ -33,44 +33,23 @@
         device:null,
         overlay:false,
         notifToken:null,
-        showappbar:false,
         logged:JSON.parse(localStorage.getItem('logged')),
         tokenlist:[],
+        TokenIT:[],
         Stored:null,
       }
     },
     created(){
-      let db = firebase.database()
-      try {
-      firebase
-        .messaging()
-        .requestPermission()
-        .then(() => {
-          console.log("Notification permission granted");
-          firebase
-            .messaging()
-            .getToken()
-            .then((token) => {
-              window.console.log("token ", token);
-              this.notifToken = token
-              db.ref("alluser").on('value', snapshot => {
-                let data = snapshot.val();
-                let messages = [];
-                Object.keys(data).forEach(key => {
-                messages.push(data[key]);
-                });
-                  if(messages.includes(token) == false){
-                    db.ref("alluser").push(token)
-                  }
-              });
-              this.receiveMessage();
-            });
-        })
-        .catch((err) => {
-          console.log("Unable to get token ", err);
-        });
-    } catch (e) {
-      console.log('firebase',e);
+      let u = JSON.parse(localStorage.getItem('logged'))
+      // if(u != null){
+      //   console.log('user',u)
+      if(u != null){
+        this.ConnectFirebase()
+        this.ITNotif()
+        console.log('user login')
+    }
+    else{
+      console.log('user masi kosong')
     }
       // console.log(fbnotif.messaging())
     },
@@ -96,8 +75,10 @@
         this.device = "Desktop"
       }
       Vue.prototype.$loading = this.loading
+      Vue.prototype.$UserLogged = this.UserLogged
       Vue.prototype.$SetLog = this.SetLog
       Vue.prototype.$device = this.device
+      Vue.prototype.$ConnectFirebase = this.ConnectFirebase
       Vue.prototype.$Toast = this.Toast
       Vue.prototype.$ChangeURL = this.ChangeURL
       Vue.prototype.$Store = this.Store
@@ -107,6 +88,58 @@
       console.log(self)
     },
     methods:{
+      ConnectFirebase(){
+        console.log('conected')
+        let u = JSON.parse(localStorage.getItem('logged'))
+        let db = firebase.database()
+        try {
+          firebase
+            .messaging()
+            .requestPermission()
+            .then(() => {
+              console.log("Notification permission granted");
+              firebase
+                .messaging()
+                .getToken()
+                .then((token) => {
+                  window.console.log("token ", token);
+                  this.notifToken = token
+                  let direct = 'userlevel/'+u.level+'/'+u.id_user
+                  // const eventref = db.ref(direct) 
+                  // let snapshot = eventref.once('value');
+                  db.ref(direct).on('value', snapshot => {
+                    let data = snapshot.val();
+                    let messages = [];
+                    if(data != null){
+                      Object.keys(data).forEach(key => {
+                      messages.push(data[key]);
+                      });
+                      if(messages.includes(token) == false){
+                        db.ref(direct).push(token)
+                      }
+                    }else{
+                      db.ref(direct).push(token)
+                    }
+                  });
+                  this.receiveMessage();
+                });
+            })
+            .catch((err) => {
+              console.log("Unable to get token ", err);
+            });
+          } catch (e) {
+            console.log('firebase',e);
+          }
+      },
+      async ITNotif(){
+        const eventrefIT = firebase.database().ref("userlevel/3"); //IT
+        let snapshotIT = await eventrefIT.once('value');
+        let dx = snapshotIT.val();
+        Object.keys(dx).forEach(key => {
+          this.TokenIT.push(dx[key]);
+        });
+        Vue.prototype.$TokenIT = this.TokenIT
+      },
       loading(v){
         this.overlay = v
       },
@@ -122,7 +155,7 @@
       receiveMessage() {
         firebase.messaging().onMessage((payload) => {
           console.log("payload ", payload);
-          var myAudio = new Audio('http://localhost:8000/storage/SuaraNotif.mpeg');
+          var myAudio = new Audio(window.location.origin+'/storage/SuaraNotif.mpeg');
           myAudio.play();
           this.$Notifkan(payload.notification)
         });
@@ -138,6 +171,9 @@
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true})
+      },
+      UserLogged(){
+        return JSON.parse(localStorage.getItem('logged'))
       },
       ChangeURL(x){
         if(this.$route.path == '/'+x){

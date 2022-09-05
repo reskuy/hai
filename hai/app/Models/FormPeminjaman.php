@@ -19,4 +19,8 @@ class FormPeminjaman extends Model
     {
         return $this->belongsTo(Aset::class,'id_aset','id_aset');
     }
+    public function pengembalian()
+    {
+        return $this->belongsTo(FormPengembalianPeminjaman::class,'id_form_peminjaman','id_form_peminjaman');
+    }
 }
